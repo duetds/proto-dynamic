@@ -1,6 +1,5 @@
 /node_modules/
 /docs/
-/lib/
 /test/
 
 lerna-debug.log

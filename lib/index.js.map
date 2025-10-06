@@ -1,0 +1,1 @@
+{"version":3,"file":"index.js","sourceRoot":"","sources":["../src/index.ts"],"names":[],"mappings":"AAAA,OAAO,EAAE,SAAS,EAAE,MAAM,cAAc,CAAA;AAExC,OAAO,EACL,SAAS,EACV,CAAA","sourcesContent":["import { MyElement } from \"./my-element\"\n\nexport {\n  MyElement\n}\n"]}
