@@ -1,4 +1,5 @@
 import { MyElement } from "./my-element";
 import { ProtoDynamicTest } from "./proto-dynamic-test";
-export { MyElement, ProtoDynamicTest, };
+import { ProtoDynamicHero } from './hero/proto-dynamic-hero';
+export { MyElement, ProtoDynamicTest, ProtoDynamicHero };
 //# sourceMappingURL=index.d.ts.map
