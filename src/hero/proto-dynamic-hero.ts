@@ -163,31 +163,32 @@ export class ProtoDynamicHero extends LitElement {
       <!-- Buttons -->
       ${buttons?.length && buttons.length > 0
         ? html`
-            <div class="grid" data-testid="dynamichero_buttons" id="dynamichero_buttons">
-              ${buttons.map(button => {
-          if (button.sys.contentType.sys.id === "linkResource") {
-            return html`
-                    <duet-link
-                      id=${button.fields.key ?? nothing}
-                      icon=${button.fields.icon?.value ?? nothing}
-                      url=${button.fields.url?.value ?? nothing}
-                      variation="button"
-                    >
-                      ${button.fields.text ?? ""}
-                    </duet-link>
-                  `
-          }
-          if (button.sys.contentType.sys.id === "buttonResource") {
-            return html` <duet-button
+          <div class="grid" data-testid="dynamichero_buttons" id="dynamichero_buttons">
+            ${buttons.map(button => {
+              if (button.sys.contentType.sys.id === "linkResource") {
+                return html`
+                  <duet-link
                     id=${button.fields.key ?? nothing}
                     icon=${button.fields.icon?.value ?? nothing}
-                    >${button.fields.text ?? ""}
+                    url=${button.fields.url?.value ?? nothing}
+                    variation="button"
+                  >
+                    ${button.fields.text ?? ""}
+                  </duet-link>
+                `
+              }
+              if (button.sys.contentType.sys.id === "buttonResource") {
+                return html`
+                  <duet-button
+                    id=${button.fields.key ?? nothing}
+                    icon=${button.fields.icon?.value ?? nothing}
+                  >${button.fields.text ?? ""}
                   </duet-button>`
-          }
-          return nothing
-        })}
-            </div>
-          `
+              }
+              return nothing
+            })}
+          </div>
+        `
         : nothing}
 
       <!-- Spacer -->
