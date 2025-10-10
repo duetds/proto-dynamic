@@ -3,7 +3,7 @@
  * Copyright 2019 Google LLC
  * SPDX-License-Identifier: BSD-3-Clause
  */
-import { LitElement } from 'lit';
+import { LitElement } from "lit";
 /**
  * An example element.
  *
@@ -31,7 +31,7 @@ export declare class MyElement extends LitElement {
 }
 declare global {
     interface HTMLElementTagNameMap {
-        'my-element': MyElement;
+        "my-element": MyElement;
     }
 }
 //# sourceMappingURL=my-element.d.ts.map

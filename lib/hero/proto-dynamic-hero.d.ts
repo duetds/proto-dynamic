@@ -1,4 +1,4 @@
-import { LitElement } from 'lit';
+import { LitElement } from "lit";
 interface Sys {
     sys: {
         contentType: {
@@ -61,11 +61,6 @@ export declare class ProtoDynamicHero extends LitElement {
     props?: HeroItem[];
     static styles: import("lit").CSSResult;
     render(): import("lit-html").TemplateResult<1>;
-}
-declare global {
-    interface HTMLElementTagNameMap {
-        'proto-dynamic-hero': ProtoDynamicHero;
-    }
 }
 export {};
 //# sourceMappingURL=proto-dynamic-hero.d.ts.map

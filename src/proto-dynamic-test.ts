@@ -1,6 +1,5 @@
-
-import {LitElement, html} from 'lit';
-import {customElement} from 'lit/decorators.js';
+import { html, LitElement } from "lit"
+import { customElement } from "lit/decorators.js"
 
 /**
  * An example element.
@@ -9,20 +8,13 @@ import {customElement} from 'lit/decorators.js';
  * @slot - This element has a slot
  * @csspart button - The button
  */
-@customElement('proto-dynamic-test')
+@customElement("proto-dynamic-test")
 export class ProtoDynamicTest extends LitElement {
-
   override render() {
     return html`
       <duet-heading>
         <slot></slot>
       </duet-heading>
-    `;
-  }
-}
-
-declare global {
-  interface HTMLElementTagNameMap {
-    'proto-dynamic-test': ProtoDynamicTest;
+    `
   }
 }
