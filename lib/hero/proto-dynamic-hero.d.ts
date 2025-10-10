@@ -1,41 +1,42 @@
 import { LitElement } from 'lit';
-interface ButtonResource {
+interface Sys {
     sys: {
         contentType: {
             sys: {
-                id: 'linkResource' | 'buttonResource';
+                id: string;
             };
         };
     };
+}
+interface ButtonResource extends Sys {
     fields: {
         key?: string;
         text?: {
             value: string;
         };
-        name?: string;
-        external?: boolean;
-        expand?: boolean;
         icon?: {
             value: string;
         };
-        iconBackground?: string;
         iconColor?: string;
-        margin?: string;
-        padding?: string;
         url?: {
             value: string;
         };
         variation?: string;
-        centerText?: boolean;
-        color?: {
-            value: string;
-        };
-        disabled?: boolean;
-        size?: string;
-        submit?: boolean;
-        fixed?: boolean;
-        iconSize?: string;
-        negative?: boolean;
+    };
+}
+interface ContentResource extends Sys {
+    fields: {
+        key?: string;
+        linkIconColorVariation?: string;
+        linkVariation?: string;
+        content?: {
+            fields?: {
+                icon?: string;
+                key?: string;
+                text?: string;
+                url?: string;
+            };
+        }[];
     };
 }
 interface HeroFields {
@@ -49,6 +50,7 @@ interface HeroFields {
             }[];
         }[];
     };
+    content?: ContentResource[];
     buttons?: ButtonResource[];
     icon?: string;
 }
