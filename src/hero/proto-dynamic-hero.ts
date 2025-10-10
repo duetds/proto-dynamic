@@ -99,12 +99,11 @@ export class ProtoDynamicHero extends LitElement {
     const buttons = fields?.buttons;
 
     return html`
-      <!--   TODO: duet-page-heading creates horizontal padding on smaller screens   -->
       <duet-page-heading
         data-testid="dynamichero_page-heading"
         icon=${fields?.icon ?? nothing}
         id="dynamichero_page-heading"
-        layout="fluid"
+        layout="auto"
       >
         <!-- Title -->
         ${headingObject
