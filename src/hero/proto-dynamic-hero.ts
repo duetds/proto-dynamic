@@ -1,58 +1,58 @@
-import {css, html, LitElement, nothing} from 'lit';
-import {customElement, property} from 'lit/decorators.js';
+import { css, html, LitElement, nothing } from "lit"
+import { customElement, property } from "lit/decorators.js"
 
 interface Sys {
   sys: {
     contentType: {
       sys: {
-        id: string;
-      };
-    };
-  };
+        id: string
+      }
+    }
+  }
 }
 
 interface ButtonResource extends Sys {
   fields: {
-    key?: string;
-    text?: {value: string};
-    icon?: {value: string};
-    iconColor?: string;
-    url?: {value: string};
-    variation?: string;
-  };
+    key?: string
+    text?: { value: string }
+    icon?: { value: string }
+    iconColor?: string
+    url?: { value: string }
+    variation?: string
+  }
 }
 
 interface ContentResource extends Sys {
   fields: {
-    key?: string;
-    linkIconColorVariation?: string;
-    linkVariation?: string;
+    key?: string
+    linkIconColorVariation?: string
+    linkVariation?: string
     content?: {
       fields?: {
-        icon?: string;
-        key?: string;
-        text?: string;
-        url?: string;
-      };
-    }[];
-  };
+        icon?: string
+        key?: string
+        text?: string
+        url?: string
+      }
+    }[]
+  }
 }
 
 interface HeroFields {
-  heading?: {value: string};
-  intro?: {content: {content: {value: string}[]}[]};
-  content?: ContentResource[];
-  buttons?: ButtonResource[];
-  icon?: string;
+  heading?: { value: string }
+  intro?: { content: { content: { value: string }[] }[] }
+  content?: ContentResource[]
+  buttons?: ButtonResource[]
+  icon?: string
 }
 
 interface HeroItem {
-  fields?: HeroFields;
+  fields?: HeroFields
 }
 
-@customElement('proto-dynamic-hero')
+@customElement("proto-dynamic-hero")
 export class ProtoDynamicHero extends LitElement {
-  @property({type: Array}) props?: HeroItem[];
+  @property({ type: Array }) props?: HeroItem[]
 
   static override styles = css`
     /* Only display the spacer in heading if a "back link" is present */
@@ -89,17 +89,16 @@ export class ProtoDynamicHero extends LitElement {
         row-gap: 8px;
       }
     }
-  `;
+  `
 
   override render() {
-    const fields = this.props?.[0]?.fields;
-    const headingObject = fields?.heading; // { value?: string } | undefined
-    const introObject = fields?.intro;
-    const content = fields?.content;
-    const buttons = fields?.buttons;
+    const fields = this.props?.[0]?.fields
+    const headingObject = fields?.heading // { value?: string } | undefined
+    const introObject = fields?.intro
+    const content = fields?.content
+    const buttons = fields?.buttons
 
     return html`
-      <!--   TODO: duet-page-heading creates horizontal padding on smaller screens   -->
       <duet-page-heading
         data-testid="dynamichero_page-heading"
         icon=${fields?.icon ?? nothing}
@@ -107,8 +106,9 @@ export class ProtoDynamicHero extends LitElement {
         layout="auto"
       >
         <!-- Title -->
-        ${headingObject
-          ? html`
+        ${
+          headingObject
+            ? html`
               <duet-heading
                 data-testid="dynamichero_page-title"
                 id="dynamichero_page-title"
@@ -119,18 +119,21 @@ export class ProtoDynamicHero extends LitElement {
                 ${headingObject}
               </duet-heading>
             `
-          : null}
+            : null
+        }
       </duet-page-heading>
 
       <!-- Render if intro exists -->
-      ${introObject
-        ? html`
+      ${
+        introObject
+          ? html`
             <div>
               ${introObject.content[0].content[0]?.value}
               <duet-spacer size="large"></duet-spacer>
             </div>
           `
-        : null}
+          : null
+      }
 
       <!--  TODO: Check if this main is required. LLA might've forgotten it   -->
       <div slot="main">
@@ -139,45 +142,46 @@ export class ProtoDynamicHero extends LitElement {
       </div>
 
       <!-- Dynamic Group -->
-      ${content?.length && content.length > 0
-        ? html`
+      ${
+        content?.length && content.length > 0
+          ? html`
             <div
               class="grid"
               data-testid="dynamichero_content"
               id="dynamichero_content"
             >
-              ${content.map((content) => {
-                if (content.sys.contentType.sys.id === 'dynamicGroup') {
+              ${content.map(content => {
+                if (content.sys.contentType.sys.id === "dynamicGroup") {
                   return html`
                     <duet-link
                       id=${content.fields.key ?? nothing}
-                      icon=${content.fields.content?.[0]?.fields?.icon ??
-                      nothing}
-                      icon-color=${content.fields.linkIconColorVariation ??
-                      nothing}
+                      icon=${content.fields.content?.[0]?.fields?.icon ?? nothing}
+                      icon-color=${content.fields.linkIconColorVariation ?? nothing}
                       variation=${content.fields.linkVariation ?? nothing}
                       url=${content.fields.content?.[0]?.fields?.url ?? nothing}
                     >
-                      ${content.fields.content?.[0]?.fields?.text ?? ''}
+                      ${content.fields.content?.[0]?.fields?.text ?? ""}
                     </duet-link>
-                  `;
+                  `
                 }
-                return nothing;
+                return nothing
               })}
             </div>
           `
-        : nothing}
+          : nothing
+      }
 
       <!-- Buttons -->
-      ${buttons?.length && buttons.length > 0
-        ? html`
+      ${
+        buttons?.length && buttons.length > 0
+          ? html`
             <div
               class="grid"
               data-testid="dynamichero_buttons"
               id="dynamichero_buttons"
             >
-              ${buttons.map((button) => {
-                if (button.sys.contentType.sys.id === 'linkResource') {
+              ${buttons.map(button => {
+                if (button.sys.contentType.sys.id === "linkResource") {
                   return html`
                     <duet-link
                       id=${button.fields.key ?? nothing}
@@ -185,31 +189,26 @@ export class ProtoDynamicHero extends LitElement {
                       url=${button.fields.url?.value ?? nothing}
                       variation="button"
                     >
-                      ${button.fields.text ?? ''}
+                      ${button.fields.text ?? ""}
                     </duet-link>
-                  `;
+                  `
                 }
-                if (button.sys.contentType.sys.id === 'buttonResource') {
+                if (button.sys.contentType.sys.id === "buttonResource") {
                   return html` <duet-button
                     id=${button.fields.key ?? nothing}
                     icon=${button.fields.icon?.value ?? nothing}
-                    >${button.fields.text ?? ''}
-                  </duet-button>`;
+                    >${button.fields.text ?? ""}
+                  </duet-button>`
                 }
-                return nothing;
+                return nothing
               })}
             </div>
           `
-        : nothing}
+          : nothing
+      }
 
       <!-- Spacer -->
       <duet-spacer size="xxx-large"></duet-spacer>
-    `;
-  }
-}
-
-declare global {
-  interface HTMLElementTagNameMap {
-    'proto-dynamic-hero': ProtoDynamicHero;
+    `
   }
 }
