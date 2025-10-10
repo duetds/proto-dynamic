@@ -171,6 +171,7 @@ export class ProtoDynamicHero extends LitElement {
                       id=${button.fields.key ?? nothing}
                       icon=${button.fields.icon?.value ?? nothing}
                       url=${button.fields.url?.value ?? nothing}
+                      variation="button"
                     >
                       ${button.fields.text ?? ""}
                     </duet-link>
