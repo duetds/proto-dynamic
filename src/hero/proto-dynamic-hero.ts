@@ -104,7 +104,7 @@ export class ProtoDynamicHero extends LitElement {
         data-testid="dynamichero_page-heading"
         icon=${fields?.icon ?? nothing}
         id="dynamichero_page-heading"
-        layout="fluid"
+        layout="auto"
       >
         <!-- Title -->
         ${headingObject
