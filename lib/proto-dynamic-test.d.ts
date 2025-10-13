@@ -1,4 +1,4 @@
-import { LitElement } from 'lit';
+import { LitElement } from "lit";
 /**
  * An example element.
  *
@@ -8,10 +8,5 @@ import { LitElement } from 'lit';
  */
 export declare class ProtoDynamicTest extends LitElement {
     render(): import("lit-html").TemplateResult<1>;
-}
-declare global {
-    interface HTMLElementTagNameMap {
-        'proto-dynamic-test': ProtoDynamicTest;
-    }
 }
 //# sourceMappingURL=proto-dynamic-test.d.ts.map
