@@ -50,9 +50,15 @@ interface HeroItem {
   fields?: HeroFields
 }
 
+interface ButtonUrl {
+  buttonId: string
+  buttonUrl: string
+}
+
 @customElement("proto-dynamic-hero")
 export class ProtoDynamicHero extends LitElement {
   @property({ type: Array }) props?: HeroItem[]
+  @property({ type: Array }) buttonUrls?: ButtonUrl[]
 
   static override styles = css`
     /* Only display the spacer in heading if a "back link" is present */
@@ -92,7 +98,6 @@ export class ProtoDynamicHero extends LitElement {
   `
 
   override render() {
-    console.log("Dynamic Hero Properties", this.props)
     const fields = this.props?.[0]?.fields
     const headingObject = fields?.heading
     const introObject = fields?.intro
@@ -187,7 +192,9 @@ export class ProtoDynamicHero extends LitElement {
                     <duet-link
                       id=${button.fields.key ?? nothing}
                       icon=${button.fields.icon ?? nothing}
-                      url=${button.fields.url ?? nothing}
+                      url=${this.buttonUrls
+                        ? this.buttonUrls.find(b => b.buttonId === button.fields.key)?.buttonUrl
+                        : button.fields.url ?? nothing}
                       variation="button"
                     >
                       ${button.fields.text ?? ""}
