@@ -1,5 +1,5 @@
-import {css, html, LitElement, nothing} from 'lit';
-import {customElement, property} from 'lit/decorators.js';
+import { css, html, LitElement, nothing } from "lit"
+import { customElement, property } from "lit/decorators.js"
 
 interface Sys {
   sys: {
@@ -49,7 +49,6 @@ interface HeroFields {
 interface HeroItem {
   fields?: HeroFields
 }
-
 
 /**
  * An example element.
@@ -115,8 +114,8 @@ export class ProtoDynamicTest extends LitElement {
       >
         <!-- Title -->
         ${
-      headingObject
-        ? html`
+          headingObject
+            ? html`
               <duet-heading
                 data-testid="dynamichero_page-title"
                 id="dynamichero_page-title"
@@ -127,21 +126,21 @@ export class ProtoDynamicTest extends LitElement {
                 ${headingObject}
               </duet-heading>
             `
-        : null
-    }
+            : null
+        }
       </duet-page-heading>
 
       <!-- Render if intro exists -->
       ${
-      introObject
-        ? html`
+        introObject
+          ? html`
             <div>
               ${introObject.content[0].content[0]?.value}
               <duet-spacer size="large"></duet-spacer>
             </div>
           `
-        : null
-    }
+          : null
+      }
 
       <!--  TODO: Check if this main is required. LLA might've forgotten it   -->
       <div slot="main">
@@ -151,16 +150,16 @@ export class ProtoDynamicTest extends LitElement {
 
       <!-- Dynamic Group -->
       ${
-      content?.length && content.length > 0
-        ? html`
+        content?.length && content.length > 0
+          ? html`
             <div
               class="grid"
               data-testid="dynamichero_content"
               id="dynamichero_content"
             >
               ${content.map(content => {
-          if (content.sys.contentType.sys.id === "dynamicGroup") {
-            return html`
+                if (content.sys.contentType.sys.id === "dynamicGroup") {
+                  return html`
                     <duet-link
                       id=${content.fields.key ?? nothing}
                       icon=${content.fields.content?.[0]?.fields?.icon ?? nothing}
@@ -171,26 +170,26 @@ export class ProtoDynamicTest extends LitElement {
                       ${content.fields.content?.[0]?.fields?.text ?? ""}
                     </duet-link>
                   `
-          }
-          return nothing
-        })}
+                }
+                return nothing
+              })}
             </div>
           `
-        : nothing
-    }
+          : nothing
+      }
 
       <!-- Buttons -->
       ${
-      buttons?.length && buttons.length > 0
-        ? html`
+        buttons?.length && buttons.length > 0
+          ? html`
             <div
               class="grid"
               data-testid="dynamichero_buttons"
               id="dynamichero_buttons"
             >
               ${buttons.map(button => {
-          if (button.sys.contentType.sys.id === "linkResource") {
-            return html`
+                if (button.sys.contentType.sys.id === "linkResource") {
+                  return html`
                     <duet-link
                       id=${button.fields.key ?? nothing}
                       icon=${button.fields.icon?.value ?? nothing}
@@ -200,20 +199,20 @@ export class ProtoDynamicTest extends LitElement {
                       ${button.fields.text ?? ""}
                     </duet-link>
                   `
-          }
-          if (button.sys.contentType.sys.id === "buttonResource") {
-            return html` <duet-button
+                }
+                if (button.sys.contentType.sys.id === "buttonResource") {
+                  return html` <duet-button
                     id=${button.fields.key ?? nothing}
                     icon=${button.fields.icon?.value ?? nothing}
                     >${button.fields.text ?? ""}
                   </duet-button>`
-          }
-          return nothing
-        })}
+                }
+                return nothing
+              })}
             </div>
           `
-        : nothing
-    }
+          : nothing
+      }
 
       <!-- Spacer -->
       <duet-spacer size="xxx-large"></duet-spacer>
