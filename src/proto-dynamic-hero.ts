@@ -139,7 +139,9 @@ export class ProtoDynamicHero extends LitElement {
       <!--  TODO: Check if this main is required. LLA might've forgotten it   -->
       <div slot="main">
         <!-- Custom content -->
+        <duet-heading>
         <slot></slot>
+        </duet-heading>
       </div>
 
       <!-- Dynamic Group -->
