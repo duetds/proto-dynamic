@@ -92,7 +92,7 @@ export class ProtoDynamicHero extends LitElement {
   `
 
   override render() {
-    console.log('Dynamic Hero Properties', this.props)
+    console.log("Dynamic Hero Properties", this.props)
     const fields = this.props?.[0]?.fields
     const headingObject = fields?.heading // { value?: string } | undefined
     const introObject = fields?.intro
