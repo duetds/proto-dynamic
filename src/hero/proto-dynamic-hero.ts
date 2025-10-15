@@ -186,8 +186,8 @@ export class ProtoDynamicHero extends LitElement {
                   return html`
                     <duet-link
                       id=${button.fields.key ?? nothing}
-                      icon=${button.fields.icon?.value ?? nothing}
-                      url=${button.fields.url?.value ?? nothing}
+                      icon=${button.fields.icon ?? nothing}
+                      url=${button.fields.url ?? nothing}
                       variation="button"
                     >
                       ${button.fields.text ?? ""}
@@ -197,7 +197,7 @@ export class ProtoDynamicHero extends LitElement {
                 if (button.sys.contentType.sys.id === "buttonResource") {
                   return html` <duet-button
                     id=${button.fields.key ?? nothing}
-                    icon=${button.fields.icon?.value ?? nothing}
+                    icon=${button.fields.icon ?? nothing}
                     >${button.fields.text ?? ""}
                   </duet-button>`
                 }
