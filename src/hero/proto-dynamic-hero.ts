@@ -192,9 +192,11 @@ export class ProtoDynamicHero extends LitElement {
                     <duet-link
                       id=${button.fields.key ?? nothing}
                       icon=${button.fields.icon ?? nothing}
-                      url=${this.buttonUrls
-                        ? this.buttonUrls.find(b => b.buttonId === button.fields.key)?.buttonUrl
-                        : button.fields.url ?? nothing}
+                      url=${
+                        this.buttonUrls
+                          ? this.buttonUrls.find(b => b.buttonId === button.fields.key)?.buttonUrl
+                          : (button.fields.url ?? nothing)
+                      }
                       variation="button"
                     >
                       ${button.fields.text ?? ""}
