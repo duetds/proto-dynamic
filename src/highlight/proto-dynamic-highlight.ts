@@ -59,7 +59,7 @@ export class ProtoDynamicHighlight extends LitElement {
     const actions = fields?.actions
     const highlightVariation = fields?.style
 
-    const checkExternal = (url: string | undefined) => url?.includes("www")
+    const checkExternal = (url: string | undefined) => url?.includes("https://")
 
     // Default variant of highlight component$
     return highlightVariation === "default"
