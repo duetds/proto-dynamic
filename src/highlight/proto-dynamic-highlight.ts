@@ -1,6 +1,6 @@
 import { css, html, LitElement, nothing } from "lit"
 import { customElement, property } from "lit/decorators.js"
-import { checkExternal } from "../utils/helper-functions"
+import { isUrlExternal } from "../utils/helper-functions"
 
 interface HighlightItem {
   fields: HighlightFields
@@ -107,7 +107,7 @@ export class ProtoDynamicHighlight extends LitElement {
                               icon=${action.fields?.icon ?? nothing}
                               icon-right="true"
                               variation="plain"
-                              external=${checkExternal(action.fields.url)}
+                              external=${isUrlExternal(action.fields.url)}
                               url=${action.fields.url ?? nothing}
                             >${action.fields.text ?? ""}
                             </duet-button>

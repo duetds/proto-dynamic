@@ -1,3 +1,3 @@
-export function checkExternal(url: string | undefined): boolean {
+export function isUrlExternal(url: string | undefined): boolean {
   return !!url?.includes("https://")
 }

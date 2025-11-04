@@ -1,6 +1,6 @@
 import { css, html, LitElement, nothing } from "lit"
 import { customElement, property } from "lit/decorators.js"
-import { checkExternal } from "../utils/helper-functions"
+import { isUrlExternal } from "../utils/helper-functions"
 
 interface Sys {
   sys: {
@@ -196,7 +196,7 @@ export class ProtoDynamicHero extends LitElement {
                           : button.fields.url // Replace with provided url (ask oskari about buttons if they have urls)
                       }
                       variation="button"
-                      external=${checkExternal(button.fields.url)}
+                      external=${isUrlExternal(button.fields.url)}
                     >
                       ${button.fields.text ?? ""}
                     </duet-link>
