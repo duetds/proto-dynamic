@@ -18,9 +18,7 @@ interface ButtonResource extends Sys {
             value: string;
         };
         iconColor?: string;
-        url?: {
-            value: string;
-        };
+        url?: string;
         variation?: string;
     };
 }

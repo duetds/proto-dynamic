@@ -1,5 +1,6 @@
 import { css, html, LitElement, nothing } from "lit"
 import { customElement, property } from "lit/decorators.js"
+import { isUrlExternal } from "../utils/helper-functions"
 
 interface Sys {
   sys: {
@@ -17,7 +18,7 @@ interface ButtonResource extends Sys {
     text?: { value: string }
     icon?: { value: string }
     iconColor?: string
-    url?: { value: string }
+    url?: string
     variation?: string
   }
 }
@@ -100,13 +101,12 @@ export class ProtoDynamicHero extends LitElement {
   override render() {
     const fields = this.props?.[0]?.fields
     const headingObject = fields?.heading
-    const introObject = fields?.intro
+    const intoText = fields?.intro?.content[0].content[0]?.value
     const content = fields?.content
     const buttons = fields?.buttons
 
     return html`
       <duet-page-heading
-        data-testid="dynamichero_page-heading"
         icon=${fields?.icon ?? nothing}
         id="dynamichero_page-heading"
         layout="auto"
@@ -129,12 +129,13 @@ export class ProtoDynamicHero extends LitElement {
         }
       </duet-page-heading>
 
+      <duet-grid grid-template="sidebar-right">
       <!-- Render if intro exists -->
       ${
-        introObject
+        intoText
           ? html`
             <div>
-              ${introObject.content[0].content[0]?.value}
+              ${intoText}
               <duet-spacer size="large"></duet-spacer>
             </div>
           `
@@ -157,8 +158,7 @@ export class ProtoDynamicHero extends LitElement {
               id="dynamichero_content"
             >
               ${content.map(content => {
-                if (content.sys.contentType.sys.id === "dynamicGroup") {
-                  return html`
+                return html`
                     <duet-link
                       id=${content.fields.key ?? nothing}
                       icon=${content.fields.content?.[0]?.fields?.icon ?? nothing}
@@ -169,17 +169,16 @@ export class ProtoDynamicHero extends LitElement {
                       ${content.fields.content?.[0]?.fields?.text ?? ""}
                     </duet-link>
                   `
-                }
-                return nothing
               })}
             </div>
           `
           : nothing
       }
-
+      </duet-grid>
+      
       <!-- Buttons -->
       ${
-        buttons?.length && buttons.length > 0
+        buttons?.length
           ? html`
             <div
               class="grid"
@@ -187,38 +186,28 @@ export class ProtoDynamicHero extends LitElement {
               id="dynamichero_buttons"
             >
               ${buttons.map(button => {
-                if (button.sys.contentType.sys.id === "linkResource") {
-                  return html`
+                return html`
                     <duet-link
                       id=${button.fields.key ?? nothing}
                       icon=${button.fields.icon ?? nothing}
                       url=${
                         this.buttonUrls
                           ? this.buttonUrls.find(b => b.buttonId === button.fields.key)?.buttonUrl
-                          : (button.fields.url ?? nothing)
+                          : button.fields.url // Replace with provided url (ask oskari about buttons if they have urls)
                       }
                       variation="button"
+                      external=${isUrlExternal(button.fields.url)}
                     >
                       ${button.fields.text ?? ""}
                     </duet-link>
                   `
-                }
-                if (button.sys.contentType.sys.id === "buttonResource") {
-                  return html` <duet-button
-                    id=${button.fields.key ?? nothing}
-                    icon=${button.fields.icon ?? nothing}
-                    >${button.fields.text ?? ""}
-                  </duet-button>`
-                }
-                return nothing
               })}
             </div>
           `
           : nothing
       }
 
-      <!-- Spacer -->
-      <duet-spacer size="xxx-large"></duet-spacer>
+      <duet-spacer size="x-large"></duet-spacer>
     `
   }
 }
