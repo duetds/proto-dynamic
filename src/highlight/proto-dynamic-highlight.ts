@@ -1,5 +1,6 @@
 import { css, html, LitElement, nothing } from "lit"
 import { customElement, property } from "lit/decorators.js"
+import { checkExternal } from "../utils/helper-functions"
 
 interface HighlightItem {
   fields: HighlightFields
@@ -58,8 +59,6 @@ export class ProtoDynamicHighlight extends LitElement {
     const description = fields?.description?.content?.[0]?.content?.[0]?.value
     const actions = fields?.actions
     const highlightVariation = fields?.style
-
-    const checkExternal = (url: string | undefined) => url?.includes("https://")
 
     // Default variant of highlight component$
     return highlightVariation === "default"

@@ -1,0 +1,1 @@
+{"version":3,"file":"helper-functions.js","sourceRoot":"","sources":["../../src/utils/helper-functions.ts"],"names":[],"mappings":"AAAA,MAAM,UAAU,aAAa,CAAC,GAAuB;IACnD,OAAO,CAAC,CAAC,GAAG,EAAE,QAAQ,CAAC,UAAU,CAAC,CAAA;AACpC,CAAC","sourcesContent":["export function checkExternal(url: string | undefined): boolean {\n  return !!url?.includes(\"https://\")\n}\n"]}
