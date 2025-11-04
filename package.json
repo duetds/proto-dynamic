@@ -31,7 +31,9 @@
     "test:watch": "wtr --watch",
     "test:prod": "MODE=prod wtr",
     "test:prod:watch": "MODE=prod wtr --watch",
-    "checksize": "rollup -c ; cat my-element.bundled.js | gzip -9 | wc -c ; rm my-element.bundled.js"
+    "checksize": "rollup -c ; cat my-element.bundled.js | gzip -9 | wc -c ; rm my-element.bundled.js",
+    "dev:copy:yrd": "esbuild ./lib/index.js --bundle --outfile=../yrd-prototype/dist/lit/components/proto-dynamic.js",
+    "dev:watch:yrd": "nodemon --watch lib --exec \"npm run dev:copy:yrd\""
   },
   "keywords": [
     "web-components",
@@ -60,8 +62,10 @@
     "@web/test-runner": "^0.20.2",
     "@web/test-runner-playwright": "^0.11.1",
     "@webcomponents/webcomponentsjs": "^2.8.0",
+    "esbuild": "^0.25.2",
     "eslint": "^8.15.0",
     "lit-analyzer": "^2.0.3",
+    "nodemon": "3.1.10",
     "rimraf": "^6.0.1",
     "rollup": "^4.18.0",
     "rollup-plugin-summary": "^2.0.1",
