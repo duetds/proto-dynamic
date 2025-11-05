@@ -191,9 +191,7 @@ export class ProtoDynamicHero extends LitElement {
                       id=${button.fields.key ?? nothing}
                       icon=${button.fields.icon ?? nothing}
                       url=${
-                        this.buttonUrls
-                          ? this.buttonUrls.find(b => b.buttonId === button.fields.key)?.buttonUrl
-                          : button.fields.url // Replace with provided url (ask oskari about buttons if they have urls)
+                        this.buttonUrls?.find(b => b.buttonId === button.fields.key)?.buttonUrl || button.fields.url
                       }
                       variation="button"
                       external=${isUrlExternal(button.fields.url)}

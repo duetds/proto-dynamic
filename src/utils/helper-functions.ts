@@ -1,3 +1,6 @@
 export function isUrlExternal(url: string | undefined): boolean {
-  return !!url?.includes("https://")
+  const test = !!url?.includes("https://")
+
+  console.log("TEST: ", test)
+  return test
 }
