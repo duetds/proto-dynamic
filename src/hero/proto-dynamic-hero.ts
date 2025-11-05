@@ -59,7 +59,7 @@ interface ButtonUrl {
 @customElement("proto-dynamic-hero")
 export class ProtoDynamicHero extends LitElement {
   @property({ type: Array }) props?: HeroItem[]
-  @property({ type: Array }) buttonUrls?: ButtonUrl[]
+  @property({ type: Array }) buttonUrls?: ButtonUrl[] // Button URLs are only for proto use
 
   static override styles = css`
     /* Only display the spacer in heading if a "back link" is present */
