@@ -2,11 +2,11 @@ import { css, html, LitElement, nothing } from "lit"
 import { customElement, property } from "lit/decorators.js"
 import { isUrlExternal } from "../utils/helper-functions"
 
-export interface HighlightItem {
+interface HighlightItem {
   fields: HighlightFields
 }
 
-export interface HighlightFields {
+interface HighlightFields {
   key: string
   icon?: string
   heading?: string
@@ -15,16 +15,16 @@ export interface HighlightFields {
   style?: string
 }
 
-export interface RichTextDocument {
+interface RichTextDocument {
   content: RichTextNode[]
 }
 
-export interface RichTextNode {
+interface RichTextNode {
   content?: RichTextNode[]
   value?: string
 }
 
-export interface ActionEntry {
+interface ActionEntry {
   fields: {
     key: string
     text?: string
