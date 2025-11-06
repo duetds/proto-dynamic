@@ -10,6 +10,7 @@ interface GroupItem {
 interface GroupItemFields extends HighlightFields {
   content?: ActionEntry[]
   linkVariation?: string
+  linkIconColorVariation?: string
 }
 
 @customElement("proto-dynamic-group")
@@ -35,7 +36,10 @@ export class ProtoDynamicGroup extends LitElement {
     const fields = this.props?.fields
     const groupTitle = fields?.heading
     const content = fields?.content
-    const groupVariation = fields?.linkVariation ?? undefined
+
+    // TODO: block-divider and block-menu variant functionality missing
+    const linkVariation = fields?.linkVariation ?? undefined
+    const linkColorVariation = fields?.linkIconColorVariation ?? undefined
 
     return html`
         <duet-grid-item fill>
@@ -62,7 +66,9 @@ export class ProtoDynamicGroup extends LitElement {
                               id=${item.fields.key}
                               icon=${item.fields?.icon ?? nothing}
                               icon-right
-                              variation=${groupVariation}
+                              icon-background=${linkColorVariation}
+                              icon-color=${linkColorVariation ? "color-gray-lightest" : nothing}
+                              variation=${linkVariation}
                               external=${isUrlExternal(item.fields.url)}
                               url=${item.fields.url ?? nothing}
                             >${item.fields.text ?? ""}

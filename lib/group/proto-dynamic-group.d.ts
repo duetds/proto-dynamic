@@ -6,6 +6,7 @@ interface GroupItem {
 interface GroupItemFields extends HighlightFields {
     content?: ActionEntry[];
     linkVariation?: string;
+    linkIconColorVariation?: string;
 }
 export declare class ProtoDynamicGroup extends LitElement {
     props?: GroupItem;
