@@ -35,7 +35,7 @@ interface ActionEntry {
 
 @customElement("proto-dynamic-highlight")
 export class ProtoDynamicHighlight extends LitElement {
-  @property({ type: Array }) props?: HighlightItem
+  @property({ type: Object }) props?: HighlightItem
 
   static override styles = css`
       .actions {
