@@ -53,7 +53,6 @@ export class ProtoDynamicHighlight extends LitElement {
   `
 
   override render() {
-    console.log("highlight component", this.props)
     const fields = this.props?.fields
     const highlightTitle = fields?.heading
     const iconName = fields?.icon
