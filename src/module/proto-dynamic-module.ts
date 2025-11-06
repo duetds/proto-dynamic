@@ -44,7 +44,7 @@ export class ProtoDynamicModule extends LitElement {
           item.sys.contentType.sys.id === "highlight"
             ? html`<proto-dynamic-highlight .props=${item}></proto-dynamic-highlight>`
             : item.sys.contentType.sys.id === "dynamicGroup"
-              ? html`<span>Dynamic Group</span>`
+              ? html`<proto-dynamic-group .props=${item}></proto-dynamic-group>`
               : nothing
         )}
       </duet-grid>
