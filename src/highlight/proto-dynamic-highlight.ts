@@ -2,11 +2,11 @@ import { css, html, LitElement, nothing } from "lit"
 import { customElement, property } from "lit/decorators.js"
 import { isUrlExternal } from "../utils/helper-functions"
 
-interface HighlightItem {
+export interface HighlightItem {
   fields: HighlightFields
 }
 
-interface HighlightFields {
+export interface HighlightFields {
   key: string
   icon?: string
   heading?: string
@@ -15,16 +15,16 @@ interface HighlightFields {
   style?: string
 }
 
-interface RichTextDocument {
+export interface RichTextDocument {
   content: RichTextNode[]
 }
 
-interface RichTextNode {
+export interface RichTextNode {
   content?: RichTextNode[]
   value?: string
 }
 
-interface ActionEntry {
+export interface ActionEntry {
   fields: {
     key: string
     text?: string
@@ -35,7 +35,7 @@ interface ActionEntry {
 
 @customElement("proto-dynamic-highlight")
 export class ProtoDynamicHighlight extends LitElement {
-  @property({ type: Array }) props?: HighlightItem
+  @property({ type: Object }) props?: HighlightItem
 
   static override styles = css`
       .actions {
@@ -53,6 +53,7 @@ export class ProtoDynamicHighlight extends LitElement {
   `
 
   override render() {
+    console.log("highlight component", this.props)
     const fields = this.props?.fields
     const highlightTitle = fields?.heading
     const iconName = fields?.icon

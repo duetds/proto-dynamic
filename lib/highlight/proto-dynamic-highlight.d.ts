@@ -1,8 +1,8 @@
 import { LitElement, nothing } from "lit";
-interface HighlightItem {
+export interface HighlightItem {
     fields: HighlightFields;
 }
-interface HighlightFields {
+export interface HighlightFields {
     key: string;
     icon?: string;
     heading?: string;
@@ -10,14 +10,14 @@ interface HighlightFields {
     actions?: ActionEntry[];
     style?: string;
 }
-interface RichTextDocument {
+export interface RichTextDocument {
     content: RichTextNode[];
 }
-interface RichTextNode {
+export interface RichTextNode {
     content?: RichTextNode[];
     value?: string;
 }
-interface ActionEntry {
+export interface ActionEntry {
     fields: {
         key: string;
         text?: string;
@@ -30,5 +30,4 @@ export declare class ProtoDynamicHighlight extends LitElement {
     static styles: import("lit").CSSResult;
     render(): import("lit-html").TemplateResult<1> | typeof nothing;
 }
-export {};
 //# sourceMappingURL=proto-dynamic-highlight.d.ts.map
