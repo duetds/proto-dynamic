@@ -43,7 +43,7 @@ export class ProtoDynamicModule extends LitElement {
         case "highlight":
           return html`<proto-dynamic-highlight .props=${item}></proto-dynamic-highlight>`
         case "dynamicGroup":
-          return html`<span>Dynamic Group</span>`
+          return html`<proto-dynamic-group .props=${item}></proto-dynamic-group>`
         default:
           return nothing
       }
