@@ -73,7 +73,7 @@
   },
   "peerDependencies": {
     "@duetds/components": "^9.6.0",
-    "@duetds/tokens": "4.0.85"
+    "@duetds/tokens": "^4.0.85"
   },
   "customElements": "custom-elements.json"
 }
