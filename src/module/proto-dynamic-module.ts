@@ -31,7 +31,7 @@ export class ProtoDynamicModule extends LitElement {
   override render() {
     const fields = this.props?.[0]?.fields
     const content = fields?.content
-
+console.log('FIELDS', fields)
     function getGridTemplate() {
       if (content?.length === 1) return "large"
       if (content?.length === 2) return "two-columns"
@@ -52,9 +52,9 @@ export class ProtoDynamicModule extends LitElement {
     return content
       ? html`
       <duet-grid grid-template=${getGridTemplate()}>
-        ${content.map(item => {
+        ${content.map(item => 
           getComponent(item)
-        })}
+        )}
       </duet-grid>
    `
       : nothing
