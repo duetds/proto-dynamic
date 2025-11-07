@@ -40,7 +40,8 @@ export class ProtoDynamicGroup extends LitElement {
     // TODO: block-divider and block-menu variant functionality missing
     const linkVariation = fields?.linkVariation ?? undefined
     const linkColorVariation = fields?.linkIconColorVariation ?? undefined
-
+console.log('THIS PROPS: ', this.props)
+    console.log('GROUP TITLE: ', groupTitle)
     return html`
         <duet-grid-item fill>
           <duet-grid

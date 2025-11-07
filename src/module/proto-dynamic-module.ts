@@ -39,6 +39,7 @@ export class ProtoDynamicModule extends LitElement {
     }
 
     function getComponent(item: ActionEntry) {
+      console.log('MODULE ITEM: ', item)
       switch (item.sys.contentType.sys.id) {
         case "highlight":
           return html`<proto-dynamic-highlight .props=${item}></proto-dynamic-highlight>`

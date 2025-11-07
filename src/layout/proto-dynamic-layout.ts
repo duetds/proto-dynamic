@@ -21,7 +21,8 @@ export class ProtoDynamicLayout extends LitElement {
   override render() {
     const dynamicComponents = this.props?.__dynamicLayout
     if (!dynamicComponents) return nothing
-
+    console.log('DYNAMIC LAYOUT this.props', this.props)
+    console.log('DYNAMIC LAYOUT', dynamicComponents)
     return html`
       ${dynamicComponents.map(component => {
         const container = this.props?.[component.key] as DynamicComponentContainer | undefined
