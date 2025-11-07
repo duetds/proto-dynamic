@@ -24,13 +24,13 @@ export class ProtoDynamicLayout extends LitElement {
 
     return html`
       ${dynamicComponents.map(component => {
-      const container = this.props?.[component.key] as DynamicComponentContainer | undefined
-      const data = container?.__dynamicComponent
+        const container = this.props?.[component.key] as DynamicComponentContainer | undefined
+        const data = container?.__dynamicComponent
 
-      return html`
+        return html`
           <proto-dynamic-module .props=${data}></proto-dynamic-module>
         `
-    })}
+      })}
     `
   }
 }
