@@ -53,7 +53,7 @@ export class ProtoDynamicModule extends LitElement {
       ? html`
       <duet-grid grid-template=${getGridTemplate()}>
         <duet-grid-item fill>
-          ${content.map(item => getComponent(item))}
+          ${content.map(getComponent)}
         </duet-grid-item>
       </duet-grid>
    `
