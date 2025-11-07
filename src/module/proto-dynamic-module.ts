@@ -33,13 +33,12 @@ export class ProtoDynamicModule extends LitElement {
     const content = fields?.content
 
     function getGridTemplate() {
-      if (content?.length === 1) return "large"
+      if (content?.length === 1) return nothing
       if (content?.length === 2) return "two-columns"
       return "three-columns"
     }
 
     function getComponent(item: ActionEntry) {
-      console.log('MODULE ITEM: ', item)
       switch (item.sys.contentType.sys.id) {
         case "highlight":
           return html`<proto-dynamic-highlight .props=${item}></proto-dynamic-highlight>`
@@ -53,7 +52,9 @@ export class ProtoDynamicModule extends LitElement {
     return content
       ? html`
       <duet-grid grid-template=${getGridTemplate()}>
-        ${content.map(item => getComponent(item))}
+        <duet-grid-item fill>
+          ${content.map(item => getComponent(item))}
+        </duet-grid-item>
       </duet-grid>
    `
       : nothing
