@@ -40,6 +40,7 @@ export class ProtoDynamicGroup extends LitElement {
     // TODO: block-divider and block-menu variant functionality missing
     const linkVariation = fields?.linkVariation ?? undefined
     const linkColorVariation = fields?.linkIconColorVariation ?? undefined
+    const iconColor = linkColorVariation ? "color-gray-lightest" : nothing
 
     return html`
         <duet-grid-item fill>
@@ -49,9 +50,7 @@ export class ProtoDynamicGroup extends LitElement {
             mobile="left"
             responsive
           >
-            <duet-grid-item
-              fill
-            >
+            <duet-grid-item fill>
               <duet-heading level="h3">${groupTitle}</duet-heading>
 
               <duet-grid class="content" direction="horizontal">
@@ -67,7 +66,7 @@ export class ProtoDynamicGroup extends LitElement {
                               icon=${item.fields?.icon ?? nothing}
                               icon-right
                               icon-background=${linkColorVariation}
-                              icon-color=${linkColorVariation ? "color-gray-lightest" : nothing}
+                              icon-color=${iconColor}
                               variation=${linkVariation}
                               external=${isUrlExternal(item.fields.url)}
                               url=${item.fields.url ?? nothing}
