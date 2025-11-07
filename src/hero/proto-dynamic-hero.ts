@@ -61,6 +61,7 @@ export class ProtoDynamicHero extends LitElement {
   @property({ type: Array }) props?: HeroItem[]
   @property({ type: Array }) buttonUrls?: ButtonUrl[] // Button URLs are only for proto use
 
+  // styles
   static override styles = css`
     /* Only display the spacer in heading if a "back link" is present */
 
