@@ -1,4 +1,4 @@
-import { css, html, LitElement, nothing } from "lit"
+import { html, LitElement, nothing } from "lit"
 import { customElement, property } from "lit/decorators.js"
 import type { ActionEntry, HighlightFields } from "../highlight/proto-dynamic-highlight"
 import { isUrlExternal } from "../utils/helper-functions"
@@ -17,30 +17,15 @@ interface GroupItemFields extends HighlightFields {
 export class ProtoDynamicGroup extends LitElement {
   @property({ type: Object }) props?: GroupItem
 
-  static override styles = css`
-      .content {
-          display: flex;
-          flex-direction: column;
-          gap: var(--space-small);
-          margin-top: var(--space-small);
-
-          // Media query small
-          @media (min-width: 36em) {
-              flex-direction: row;
-              flex-wrap: wrap;
-          }
-      }
-  `
-
   override render() {
     const fields = this.props?.fields
     const groupTitle = fields?.heading
     const content = fields?.content
 
     // TODO: block-divider and block-menu variant functionality missing
-    const linkVariation = fields?.linkVariation ?? undefined
-    const linkColorVariation = fields?.linkIconColorVariation ?? undefined
-    const iconColor = linkColorVariation ? "color-gray-lightest" : nothing
+    const linkVariation = fields?.linkVariation
+    const iconBackground = fields?.linkIconColorVariation
+    const iconColor = iconBackground ? "color-gray-lightest" : nothing
 
     return html`
         <duet-grid-item fill>
@@ -53,7 +38,7 @@ export class ProtoDynamicGroup extends LitElement {
             <duet-grid-item fill>
               <duet-heading level="h3">${groupTitle}</duet-heading>
 
-              <duet-grid class="content" direction="horizontal">
+              <duet-grid class="content" direction="horizontal" responsive breakpoint="small">
                 <!-- Links -->
                 ${
                   content?.length
@@ -65,7 +50,7 @@ export class ProtoDynamicGroup extends LitElement {
                               id=${item.fields.key}
                               icon=${item.fields?.icon ?? nothing}
                               icon-right
-                              icon-background=${linkColorVariation}
+                              icon-background=${iconBackground}
                               icon-color=${iconColor}
                               variation=${linkVariation}
                               external=${isUrlExternal(item.fields.url)}
