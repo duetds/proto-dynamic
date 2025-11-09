@@ -1,5 +1,5 @@
 import { LitElement, nothing } from "lit";
-import type { ButtonUrl } from "../hero/proto-dynamic-hero";
+import type { ProtoButton } from "../hero/proto-dynamic-hero";
 interface ModuleProps {
     fields: HighlightFields;
 }
@@ -24,7 +24,7 @@ interface ActionEntry {
 }
 export declare class ProtoDynamicModule extends LitElement {
     props?: ModuleProps[];
-    buttonUrls?: ButtonUrl[];
+    protoButtons?: ProtoButton[];
     render(): import("lit-html").TemplateResult<1> | typeof nothing;
 }
 export {};

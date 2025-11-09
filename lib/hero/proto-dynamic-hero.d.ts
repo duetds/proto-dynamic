@@ -55,13 +55,14 @@ interface HeroFields {
 interface HeroItem {
     fields?: HeroFields;
 }
-export interface ButtonUrl {
+export interface ProtoButton {
     buttonId: string;
-    buttonUrl: string;
+    buttonUrl?: string;
+    onClick?: () => void;
 }
 export declare class ProtoDynamicHero extends LitElement {
     props?: HeroItem[];
-    buttonUrls?: ButtonUrl[];
+    protoButtons?: ProtoButton[];
     static styles: import("lit").CSSResult;
     render(): import("lit-html").TemplateResult<1>;
 }

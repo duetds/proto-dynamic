@@ -1,6 +1,6 @@
 import { html, LitElement, nothing } from "lit"
 import { customElement, property } from "lit/decorators.js"
-import type { ButtonUrl } from "../hero/proto-dynamic-hero"
+import type { ProtoButton } from "../hero/proto-dynamic-hero"
 
 interface DynamicLayoutItem {
   key: string
@@ -18,7 +18,7 @@ interface DynamicLayoutProps {
 @customElement("proto-dynamic-layout")
 export class ProtoDynamicLayout extends LitElement {
   @property({ type: Object }) props?: DynamicLayoutProps
-  @property({ type: Array }) buttonUrls?: ButtonUrl[] // Button URLs are only for proto use
+  @property({ type: Array }) protoButtons?: ProtoButton[] // Button URLs are only for proto use
 
   override render() {
     const dynamicComponents = this.props?.__dynamicLayout
@@ -30,7 +30,7 @@ export class ProtoDynamicLayout extends LitElement {
         const data = container?.__dynamicComponent
 
         return html`
-          <proto-dynamic-module .buttonUrls=${this.buttonUrls} .props=${data}></proto-dynamic-module>
+          <proto-dynamic-module .protoButtons=${this.protoButtons} .props=${data}></proto-dynamic-module>
         `
       })}
     `

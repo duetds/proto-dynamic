@@ -51,15 +51,16 @@ interface HeroItem {
   fields?: HeroFields
 }
 
-export interface ButtonUrl {
+export interface ProtoButton {
   buttonId: string
-  buttonUrl: string
+  buttonUrl?: string
+  onClick?: () => void
 }
 
 @customElement("proto-dynamic-hero")
 export class ProtoDynamicHero extends LitElement {
   @property({ type: Array }) props?: HeroItem[]
-  @property({ type: Array }) buttonUrls?: ButtonUrl[] // Button URLs are only for proto use
+  @property({ type: Array }) protoButtons?: ProtoButton[] // Button URLs are only for proto use
 
   // TODO: fix these custom styles with duet props
   static override styles = css`
@@ -192,7 +193,7 @@ export class ProtoDynamicHero extends LitElement {
                       id=${button.fields.key ?? nothing}
                       icon=${button.fields.icon ?? nothing}
                       url=${
-                        this.buttonUrls?.find(b => b.buttonId === button.fields.key)?.buttonUrl || button.fields.url
+                        this.protoButtons?.find(b => b.buttonId === button.fields.key)?.buttonUrl || button.fields.url
                       }
                       variation="button"
                       external=${isUrlExternal(button.fields.url)}

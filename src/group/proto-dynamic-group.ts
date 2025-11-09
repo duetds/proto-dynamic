@@ -1,14 +1,15 @@
 import { css, html, LitElement, nothing } from "lit"
 import { customElement, property } from "lit/decorators.js"
-import type { ButtonUrl } from "../hero/proto-dynamic-hero"
+import type { ProtoButton } from "../hero/proto-dynamic-hero"
 import type { ActionEntry, HighlightFields } from "../highlight/proto-dynamic-highlight"
-import { isUrlExternal } from "../utils/helper-functions"
+import { getLinkUrl, handleLinkClick, isUrlExternal } from "../utils/helper-functions"
 
-interface GroupItem {
+export interface GroupItem {
   fields: GroupItemFields
 }
 
 interface GroupItemFields extends HighlightFields {
+  url?: string
   content?: ActionEntry[]
   linkVariation?: string
   linkIconColorVariation?: string
@@ -17,7 +18,7 @@ interface GroupItemFields extends HighlightFields {
 @customElement("proto-dynamic-group")
 export class ProtoDynamicGroup extends LitElement {
   @property({ type: Object }) props?: GroupItem
-  @property({ type: Array }) buttonUrls?: ButtonUrl[] // Button URLs are only for proto use
+  @property({ type: Array }) protoButtons?: ProtoButton[] // Button URLs are only for proto use
 
   // TODO: check if possible to remove horizontal padding without ::part
   static override styles = css`
@@ -67,16 +68,14 @@ export class ProtoDynamicGroup extends LitElement {
                   <duet-link
                     id=${item.fields.key}
                     class=${getLinkVariation() === "block" ? "link-item" : nothing}
-                    url=${
-                      this.buttonUrls?.find(b => b.buttonId === item.fields.key)?.buttonUrl ||
-                      (item.fields.url ?? nothing)
-                    }
+                    url=${getLinkUrl(item, this.protoButtons)}
                     icon=${item.fields?.icon ?? nothing}
                     icon-responsive
                     icon-color=${iconColor}
                     icon-background=${iconBackground}
                     external=${isUrlExternal(item.fields.url)}
                     variation=${getLinkVariation()}
+                    @click=${() => handleLinkClick(item, this.protoButtons)}
                   >
                     ${item.fields.text ?? ""}
                   </duet-link>
