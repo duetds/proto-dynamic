@@ -1,5 +1,6 @@
 import { css, html, LitElement, nothing } from "lit"
 import { customElement, property } from "lit/decorators.js"
+import type { ButtonUrl } from "../hero/proto-dynamic-hero"
 import type { ActionEntry, HighlightFields } from "../highlight/proto-dynamic-highlight"
 import { isUrlExternal } from "../utils/helper-functions"
 
@@ -16,6 +17,7 @@ interface GroupItemFields extends HighlightFields {
 @customElement("proto-dynamic-group")
 export class ProtoDynamicGroup extends LitElement {
   @property({ type: Object }) props?: GroupItem
+  @property({ type: Array }) buttonUrls?: ButtonUrl[] // Button URLs are only for proto use
 
   // TODO: check if possible to remove horizontal padding without ::part
   static override styles = css`
@@ -59,11 +61,16 @@ export class ProtoDynamicGroup extends LitElement {
         <duet-grid-item fill margin="none">
           <ul class="dynamic-group-claims-list">
             ${content?.map(
-              item => html`
+              item =>
+                html`
                 <li>
                   <duet-link
+                    id=${item.fields.key}
                     class=${getLinkVariation() === "block" ? "link-item" : nothing}
-                    url=${item.fields.url ?? nothing}
+                    url=${
+                      this.buttonUrls?.find(b => b.buttonId === item.fields.key)?.buttonUrl ||
+                      (item.fields.url ?? nothing)
+                    }
                     icon=${item.fields?.icon ?? nothing}
                     icon-responsive
                     icon-color=${iconColor}

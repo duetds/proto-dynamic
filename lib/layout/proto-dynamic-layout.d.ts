@@ -1,4 +1,5 @@
 import { LitElement, nothing } from "lit";
+import type { ButtonUrl } from "../hero/proto-dynamic-hero";
 interface DynamicLayoutItem {
     key: string;
 }
@@ -11,6 +12,7 @@ interface DynamicLayoutProps {
 }
 export declare class ProtoDynamicLayout extends LitElement {
     props?: DynamicLayoutProps;
+    buttonUrls?: ButtonUrl[];
     render(): import("lit-html").TemplateResult<1> | typeof nothing;
 }
 export {};

@@ -1,5 +1,6 @@
 import { css, html, LitElement, nothing } from "lit"
 import { customElement, property } from "lit/decorators.js"
+import type { ButtonUrl } from "../hero/proto-dynamic-hero"
 import { isUrlExternal } from "../utils/helper-functions"
 
 interface HighlightItem {
@@ -36,6 +37,7 @@ export interface ActionEntry {
 @customElement("proto-dynamic-highlight")
 export class ProtoDynamicHighlight extends LitElement {
   @property({ type: Object }) props?: HighlightItem
+  @property({ type: Array }) buttonUrls?: ButtonUrl[] // Button URLs are only for proto use
 
   static override styles = css`
       .actions {
@@ -108,7 +110,10 @@ export class ProtoDynamicHighlight extends LitElement {
                               icon-right
                               variation="plain"
                               external=${isUrlExternal(action.fields.url)}
-                              url=${action.fields.url ?? nothing}
+                              url=${
+                                this.buttonUrls?.find(b => b.buttonId === action.fields.key)?.buttonUrl ||
+                                (action.fields.url ?? nothing)
+                              }
                             >${action.fields.text ?? ""}
                             </duet-button>
                           `

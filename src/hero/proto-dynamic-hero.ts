@@ -51,7 +51,7 @@ interface HeroItem {
   fields?: HeroFields
 }
 
-interface ButtonUrl {
+export interface ButtonUrl {
   buttonId: string
   buttonUrl: string
 }
