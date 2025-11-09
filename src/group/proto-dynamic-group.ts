@@ -24,17 +24,16 @@ export class ProtoDynamicGroup extends LitElement {
           margin: 0;
           padding: 0;
       }
-      
 
       ul.dynamic-group-claims-list li .link-item {
           border-bottom: 1px solid var(--color-gray-light);
           border-radius: 0;
       }
-      
+
       ul.dynamic-group-claims-list li:first-of-type .link-item {
           border-top: 1px solid var(--color-gray-light);
       }
-      
+
       ul.dynamic-group-claims-list li .link-item::part(duet-link) {
           padding-left: 0;
           padding-right: 0;
@@ -45,15 +44,11 @@ export class ProtoDynamicGroup extends LitElement {
     const fields = this.props?.fields
     const groupTitle = fields?.heading
     const content = fields?.content
-
-    // TODO: and block-menu variant functionality missing
     const linkVariation = fields?.linkVariation
     const iconBackground = fields?.linkIconColorVariation
-    console.log("ICON BG: ", iconBackground)
     const iconColor = iconBackground ? "color-gray-lightest" : "primary"
 
     function getLinkVariation() {
-      console.log("LINK VARIATION: ", linkVariation)
       return linkVariation ? (linkVariation === "button" ? linkVariation : "block") : nothing
     }
 
@@ -67,7 +62,7 @@ export class ProtoDynamicGroup extends LitElement {
               item => html`
                 <li>
                   <duet-link
-                    class="link-item"
+                    class=${getLinkVariation() === "block" ? "link-item" : nothing}
                     url=${item.fields.url ?? nothing}
                     icon=${item.fields?.icon ?? nothing}
                     icon-responsive
