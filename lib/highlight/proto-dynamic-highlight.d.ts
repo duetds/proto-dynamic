@@ -1,5 +1,6 @@
 import { LitElement, nothing } from "lit";
-interface HighlightItem {
+import type { ProtoButtonHandler } from "../hero/proto-dynamic-hero";
+export interface HighlightItem {
     fields: HighlightFields;
 }
 export interface HighlightFields {
@@ -9,6 +10,7 @@ export interface HighlightFields {
     description?: RichTextDocument;
     actions?: ActionEntry[];
     style?: string;
+    url?: string;
 }
 interface RichTextDocument {
     content: RichTextNode[];
@@ -27,8 +29,9 @@ export interface ActionEntry {
 }
 export declare class ProtoDynamicHighlight extends LitElement {
     props?: HighlightItem;
+    protoButtonHandlers?: ProtoButtonHandler[];
     static styles: import("lit").CSSResult;
-    render(): import("lit-html").TemplateResult<1> | typeof nothing;
+    render(): typeof nothing | import("lit-html").TemplateResult<1>;
 }
 export {};
 //# sourceMappingURL=proto-dynamic-highlight.d.ts.map

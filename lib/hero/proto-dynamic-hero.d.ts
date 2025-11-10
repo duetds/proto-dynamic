@@ -8,15 +8,11 @@ interface Sys {
         };
     };
 }
-interface ButtonResource extends Sys {
+export interface ButtonResource extends Sys {
     fields: {
-        key?: string;
-        text?: {
-            value: string;
-        };
-        icon?: {
-            value: string;
-        };
+        key: string;
+        text?: string;
+        icon?: string;
         iconColor?: string;
         url?: string;
         variation?: string;
@@ -55,13 +51,14 @@ interface HeroFields {
 interface HeroItem {
     fields?: HeroFields;
 }
-interface ButtonUrl {
+export interface ProtoButtonHandler {
     buttonId: string;
-    buttonUrl: string;
+    url?: string;
+    clickHandler?: () => void;
 }
 export declare class ProtoDynamicHero extends LitElement {
     props?: HeroItem[];
-    buttonUrls?: ButtonUrl[];
+    protoButtonHandlers?: ProtoButtonHandler[];
     static styles: import("lit").CSSResult;
     render(): import("lit-html").TemplateResult<1>;
 }
