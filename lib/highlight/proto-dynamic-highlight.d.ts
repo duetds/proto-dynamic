@@ -1,5 +1,5 @@
 import { LitElement, nothing } from "lit";
-import type { ProtoButton } from "../hero/proto-dynamic-hero";
+import type { ProtoButtonHandler } from "../hero/proto-dynamic-hero";
 export interface HighlightItem {
     fields: HighlightFields;
 }
@@ -29,7 +29,7 @@ export interface ActionEntry {
 }
 export declare class ProtoDynamicHighlight extends LitElement {
     props?: HighlightItem;
-    protoButtons?: ProtoButton[];
+    protoButtonHandlers?: ProtoButtonHandler[];
     static styles: import("lit").CSSResult;
     render(): import("lit-html").TemplateResult<1> | typeof nothing;
 }

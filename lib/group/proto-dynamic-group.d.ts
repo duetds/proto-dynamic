@@ -1,5 +1,5 @@
 import { LitElement } from "lit";
-import type { ProtoButton } from "../hero/proto-dynamic-hero";
+import type { ProtoButtonHandler } from "../hero/proto-dynamic-hero";
 import type { ActionEntry, HighlightFields } from "../highlight/proto-dynamic-highlight";
 export interface GroupItem {
     fields: GroupItemFields;
@@ -12,7 +12,7 @@ interface GroupItemFields extends HighlightFields {
 }
 export declare class ProtoDynamicGroup extends LitElement {
     props?: GroupItem;
-    protoButtons?: ProtoButton[];
+    protoButtonHandlers?: ProtoButtonHandler[];
     static styles: import("lit").CSSResult;
     render(): import("lit-html").TemplateResult<1>;
 }

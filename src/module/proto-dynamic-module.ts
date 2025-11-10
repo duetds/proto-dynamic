@@ -1,6 +1,6 @@
 import { html, LitElement, nothing } from "lit"
 import { customElement, property } from "lit/decorators.js"
-import type { ProtoButton } from "../hero/proto-dynamic-hero"
+import type { ProtoButtonHandler } from "../hero/proto-dynamic-hero"
 
 interface ModuleProps {
   fields: HighlightFields
@@ -28,7 +28,7 @@ interface ActionEntry {
 @customElement("proto-dynamic-module")
 export class ProtoDynamicModule extends LitElement {
   @property({ type: Array }) props?: ModuleProps[]
-  @property({ type: Array }) protoButtons?: ProtoButton[] // Button URLs are only for proto use
+  @property({ type: Array }) protoButtonHandlers?: ProtoButtonHandler[] // Button URLs are only for proto use
 
   override render() {
     const fields = this.props?.[0]?.fields
@@ -40,12 +40,12 @@ export class ProtoDynamicModule extends LitElement {
       return "three-columns"
     }
 
-    function getComponent(item: ActionEntry, protoButtons?: ProtoButton[]) {
+    function getComponent(item: ActionEntry, protoButtonHandlers?: ProtoButtonHandler[]) {
       switch (item.sys.contentType.sys.id) {
         case "highlight":
-          return html`<proto-dynamic-highlight .protoButtons=${protoButtons} .props=${item}></proto-dynamic-highlight>`
+          return html`<proto-dynamic-highlight .protoButtonHandlers=${protoButtonHandlers} .props=${item}></proto-dynamic-highlight>`
         case "dynamicGroup":
-          return html`<proto-dynamic-group .protoButtons=${protoButtons} .props=${item}></proto-dynamic-group>`
+          return html`<proto-dynamic-group .protoButtonHandlers=${protoButtonHandlers} .props=${item}></proto-dynamic-group>`
         default:
           return nothing
       }
@@ -57,7 +57,7 @@ export class ProtoDynamicModule extends LitElement {
           ${content.map(
             item => html`
               <duet-grid-item fill>
-                ${getComponent(item, this.protoButtons)}
+                ${getComponent(item, this.protoButtonHandlers)}
               </duet-grid-item>
             `
           )}
