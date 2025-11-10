@@ -1,7 +1,7 @@
 {
   "name": "@duetds/proto-dynamic",
   "private": true,
-  "version": "0.0.1",
+  "version": "1.0.0",
   "description": "Web components to correspond to the LLA components for dynamic Contentful types",
   "main": "lib/index.js",
   "module": "lib/index.js",
@@ -32,7 +32,7 @@
     "test:prod": "MODE=prod wtr",
     "test:prod:watch": "MODE=prod wtr --watch",
     "checksize": "rollup -c ; cat my-element.bundled.js | gzip -9 | wc -c ; rm my-element.bundled.js",
-    "dev:copy:yrd": "esbuild ./lib/index.js --bundle --outfile=../yrd-prototype/dist/lit/components/proto-dynamic.js",
+    "dev:copy:yrd": "esbuild ./lib/index.js --bundle --outfile=../yrd-prototype/dist/4d96aecc313278d986472f7dce277e224d96aecc313278d986472f7dce277e22/lit/components/proto-dynamic.js",
     "dev:watch:yrd": "nodemon --watch lib --exec \"npm run dev:copy:yrd\""
   },
   "keywords": [
