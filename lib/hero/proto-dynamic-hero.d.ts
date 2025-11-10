@@ -8,9 +8,9 @@ interface Sys {
         };
     };
 }
-interface ButtonResource extends Sys {
+export interface ButtonResource extends Sys {
     fields: {
-        key?: string;
+        key: string;
         text?: {
             value: string;
         };
@@ -58,7 +58,7 @@ interface HeroItem {
 export interface ProtoButtonHandler {
     buttonId: string;
     buttonUrl?: string;
-    onClick?: () => void;
+    clickHandler?: () => void;
 }
 export declare class ProtoDynamicHero extends LitElement {
     props?: HeroItem[];

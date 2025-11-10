@@ -1,5 +1,6 @@
 import { css, html, LitElement, nothing } from "lit"
 import { customElement, property } from "lit/decorators.js"
+import { getLinkUrl } from "../../lib/utils/helper-functions"
 import { isUrlExternal } from "../utils/helper-functions"
 
 interface Sys {
@@ -12,9 +13,9 @@ interface Sys {
   }
 }
 
-interface ButtonResource extends Sys {
+export interface ButtonResource extends Sys {
   fields: {
-    key?: string
+    key: string
     text?: { value: string }
     icon?: { value: string }
     iconColor?: string
@@ -54,7 +55,7 @@ interface HeroItem {
 export interface ProtoButtonHandler {
   buttonId: string
   buttonUrl?: string
-  onClick?: () => void
+  clickHandler?: () => void
 }
 
 @customElement("proto-dynamic-hero")
@@ -192,10 +193,7 @@ export class ProtoDynamicHero extends LitElement {
                     <duet-link
                       id=${button.fields.key ?? nothing}
                       icon=${button.fields.icon ?? nothing}
-                      url=${
-                        this.protoButtonHandlers?.find(b => b.buttonId === button.fields.key)?.buttonUrl ||
-                        button.fields.url
-                      }
+                      url=${getLinkUrl(button, this.protoButtonHandlers)}
                       variation="button"
                       external=${isUrlExternal(button.fields.url)}
                     >
