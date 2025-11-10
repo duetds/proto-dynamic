@@ -1,7 +1,7 @@
 {
   "name": "@duetds/proto-dynamic",
   "private": true,
-  "version": "0.0.1",
+  "version": "1.0.0",
   "description": "Web components to correspond to the LLA components for dynamic Contentful types",
   "main": "lib/index.js",
   "module": "lib/index.js",
