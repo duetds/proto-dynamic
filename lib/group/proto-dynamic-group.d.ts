@@ -10,6 +10,7 @@ interface GroupItemFields extends HighlightFields {
 }
 export declare class ProtoDynamicGroup extends LitElement {
     props?: GroupItem;
+    static styles: import("lit").CSSResult;
     render(): import("lit-html").TemplateResult<1>;
 }
 export {};
