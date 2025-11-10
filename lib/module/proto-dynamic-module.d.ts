@@ -1,5 +1,4 @@
 import { LitElement, nothing } from "lit";
-import type { ProtoButtonHandler } from "../hero/proto-dynamic-hero";
 interface ModuleProps {
     fields: HighlightFields;
 }
@@ -24,8 +23,7 @@ interface ActionEntry {
 }
 export declare class ProtoDynamicModule extends LitElement {
     props?: ModuleProps[];
-    protoButtonHandlers?: ProtoButtonHandler[];
-    render(): import("lit-html").TemplateResult<1> | typeof nothing;
+    render(): typeof nothing | import("lit-html").TemplateResult<1>;
 }
 export {};
 //# sourceMappingURL=proto-dynamic-module.d.ts.map
