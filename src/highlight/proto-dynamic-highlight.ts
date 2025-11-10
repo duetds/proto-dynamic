@@ -6,7 +6,7 @@ interface HighlightItem {
   fields: HighlightFields
 }
 
-interface HighlightFields {
+export interface HighlightFields {
   key: string
   icon?: string
   heading?: string
@@ -24,7 +24,7 @@ interface RichTextNode {
   value?: string
 }
 
-interface ActionEntry {
+export interface ActionEntry {
   fields: {
     key: string
     text?: string
@@ -105,7 +105,7 @@ export class ProtoDynamicHighlight extends LitElement {
                             <duet-button
                               id=${action.fields.key}
                               icon=${action.fields?.icon ?? nothing}
-                              icon-right="true"
+                              icon-right
                               variation="plain"
                               external=${isUrlExternal(action.fields.url)}
                               url=${action.fields.url ?? nothing}

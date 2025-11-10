@@ -61,6 +61,7 @@ export class ProtoDynamicHero extends LitElement {
   @property({ type: Array }) props?: HeroItem[]
   @property({ type: Array }) buttonUrls?: ButtonUrl[] // Button URLs are only for proto use
 
+  // TODO: fix these custom styles with duet props
   static override styles = css`
     /* Only display the spacer in heading if a "back link" is present */
 
@@ -129,7 +130,8 @@ export class ProtoDynamicHero extends LitElement {
         }
       </duet-page-heading>
 
-      <duet-grid grid-template="sidebar-right">
+<!--TODO: When parent has wider grid-template, we need to set grid-template="sidebar-right" for this duet-grid-->
+      <duet-grid>
       <!-- Render if intro exists -->
       ${
         intoText
@@ -182,7 +184,6 @@ export class ProtoDynamicHero extends LitElement {
           ? html`
             <div
               class="grid"
-              data-testid="dynamichero_buttons"
               id="dynamichero_buttons"
             >
               ${buttons.map(button => {

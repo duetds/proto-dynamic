@@ -2,7 +2,7 @@ import { LitElement, nothing } from "lit";
 interface HighlightItem {
     fields: HighlightFields;
 }
-interface HighlightFields {
+export interface HighlightFields {
     key: string;
     icon?: string;
     heading?: string;
@@ -17,7 +17,7 @@ interface RichTextNode {
     content?: RichTextNode[];
     value?: string;
 }
-interface ActionEntry {
+export interface ActionEntry {
     fields: {
         key: string;
         text?: string;
