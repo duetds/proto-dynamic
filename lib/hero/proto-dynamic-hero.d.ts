@@ -11,12 +11,8 @@ interface Sys {
 export interface ButtonResource extends Sys {
     fields: {
         key: string;
-        text?: {
-            value: string;
-        };
-        icon?: {
-            value: string;
-        };
+        text?: string;
+        icon?: string;
         iconColor?: string;
         url?: string;
         variation?: string;
@@ -57,7 +53,7 @@ interface HeroItem {
 }
 export interface ProtoButtonHandler {
     buttonId: string;
-    buttonUrl?: string;
+    url?: string;
     clickHandler?: () => void;
 }
 export declare class ProtoDynamicHero extends LitElement {

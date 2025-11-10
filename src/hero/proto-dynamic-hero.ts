@@ -1,7 +1,6 @@
 import { css, html, LitElement, nothing } from "lit"
 import { customElement, property } from "lit/decorators.js"
-import { getLinkUrl } from "../../lib/utils/helper-functions"
-import { isUrlExternal } from "../utils/helper-functions"
+import { getLinkUrl, isUrlExternal } from "../utils/helper-functions"
 
 interface Sys {
   sys: {
@@ -16,8 +15,8 @@ interface Sys {
 export interface ButtonResource extends Sys {
   fields: {
     key: string
-    text?: { value: string }
-    icon?: { value: string }
+    text?: string
+    icon?: string
     iconColor?: string
     url?: string
     variation?: string
@@ -54,7 +53,7 @@ interface HeroItem {
 
 export interface ProtoButtonHandler {
   buttonId: string
-  buttonUrl?: string
+  url?: string
   clickHandler?: () => void
 }
 
