@@ -26,11 +26,12 @@ export class ProtoDynamicLayout extends LitElement {
 
     return html`
       ${dynamicComponents.map(component => {
-        const container = this.props?.[component.key] as DynamicComponentContainer | undefined
-        const data = container?.__dynamicComponent
-
+        const data = (this.props?.[component.key] as DynamicComponentContainer)?.__dynamicComponent
         return html`
-          <proto-dynamic-module .protoButtonHandlers=${this.protoButtonHandlers} .props=${data}></proto-dynamic-module>
+          <proto-dynamic-module
+            .protoButtonHandlers=${this.protoButtonHandlers}
+            .props=${data}
+          ></proto-dynamic-module>
         `
       })}
     `

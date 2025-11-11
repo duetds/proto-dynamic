@@ -35,34 +35,40 @@ export class ProtoDynamicModule extends LitElement {
     const content = fields?.content
 
     function getGridTemplate() {
-      if (content?.length === 1) return nothing
-      if (content?.length === 2) return "two-columns"
-      return "three-columns"
+      if (!content?.length || content.length === 1) return nothing
+      return content.length === 2 ? "two-columns" : "three-columns"
     }
 
     function getComponent(item: ActionEntry, protoButtonHandlers?: ProtoButtonHandler[]) {
-      switch (item.sys.contentType.sys.id) {
+      const { id } = item.sys.contentType.sys
+      switch (id) {
         case "highlight":
-          return html`<proto-dynamic-highlight .protoButtonHandlers=${protoButtonHandlers} .props=${item}></proto-dynamic-highlight>`
+          return html`<proto-dynamic-highlight
+            .protoButtonHandlers=${protoButtonHandlers}
+            .props=${item}>
+          </proto-dynamic-highlight>`
         case "dynamicGroup":
-          return html`<proto-dynamic-group .protoButtonHandlers=${protoButtonHandlers} .props=${item}></proto-dynamic-group>`
+          return html`<proto-dynamic-group
+            .protoButtonHandlers=${protoButtonHandlers}
+            .props=${item}>
+          </proto-dynamic-group>`
         default:
           return nothing
       }
     }
 
-    return content
+    return content?.length
       ? html`
-      <duet-grid grid-template=${getGridTemplate()}>
+        <duet-grid grid-template=${getGridTemplate()}>
           ${content.map(
             item => html`
-              <duet-grid-item fill>
-                ${getComponent(item, this.protoButtonHandlers)}
-              </duet-grid-item>
-            `
+            <duet-grid-item fill>
+              ${getComponent(item, this.protoButtonHandlers)}
+            </duet-grid-item>
+          `
           )}
-      </duet-grid>
-   `
+        </duet-grid>
+      `
       : nothing
   }
 }

@@ -57,35 +57,31 @@ export class ProtoDynamicGroup extends LitElement {
 
     return html`
       <duet-heading level="h3">${groupTitle}</duet-heading>
-
-      <duet-grid>
-        <duet-grid-item fill margin="none">
-          <ul class="link-list">
-            ${content?.map(
-              item =>
-                html`
-                <li>
-                  <duet-link
-                    id=${item.fields.key}
-                    class=${getLinkVariation() === "block" ? "link-item" : nothing}
-                    url=${getLinkUrl(item, this.protoButtonHandlers)}
-                    icon=${item.fields?.icon ?? nothing}
-                    icon-responsive
-                    icon-color=${iconColor}
-                    icon-background=${iconBackground}
-                    external=${isUrlExternal(item.fields.url)}
-                    variation=${getLinkVariation()}
-                    @click=${() => handleLinkClick(item, this.protoButtonHandlers)}
-                  >
-                    ${item.fields.text ?? ""}
-                  </duet-link>
-                </li>
-              `
-            )}
-          </ul>
-          <duet-spacer size="xx-large"></duet-spacer>
-        </duet-grid-item>
-      </duet-grid>
+      <ul class="link-list">
+        ${content?.map(item => {
+          const { fields } = item
+          const variation = getLinkVariation()
+          return html`
+        <li>
+          <duet-link
+            id=${fields.key}
+            class=${variation === "block" ? "link-item" : nothing}
+            url=${getLinkUrl(item, this.protoButtonHandlers)}
+            icon=${fields.icon ?? nothing}
+            icon-responsive
+            icon-color=${iconColor}
+            icon-background=${iconBackground}
+            external=${isUrlExternal(fields.url)}
+            variation=${variation}
+            @click=${() => handleLinkClick(item, this.protoButtonHandlers)}
+          >
+            ${fields.text ?? ""}
+          </duet-link>
+        </li>
+      `
+        })}
+      </ul>
+      <duet-spacer size="xx-large"></duet-spacer>
     `
   }
 }

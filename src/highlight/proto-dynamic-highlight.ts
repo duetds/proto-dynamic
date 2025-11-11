@@ -17,13 +17,13 @@ export interface HighlightFields {
   url?: string
 }
 
-interface RichTextDocument {
+export interface RichTextDocument {
   content: RichTextNode[]
 }
 
-interface RichTextNode {
-  content?: RichTextNode[]
+export interface RichTextNode {
   value?: string
+  content?: RichTextNode[]
 }
 
 export interface ActionEntry {
@@ -66,65 +66,59 @@ export class ProtoDynamicHighlight extends LitElement {
     // Default variant of highlight component$
     return highlightVariation === "default"
       ? html`
-        <duet-grid-item fill>
           <duet-grid
             alignment="stretch"
             breakpoint="medium"
-            class="grid-demo"
             mobile="left"
             responsive
           >
-            <duet-grid-item
-              fill
-            >
+            <duet-grid-item fill>
               ${
                 iconName
                   ? html`
-                    <duet-icon
-                      shape="brand"
-                      size="x-large"
-                      background="primary-lighter"
-                      color="primary"
-                      name="${iconName}"
-                    ></duet-icon>
-                  `
-                  : null
-              }
-              <duet-heading level="h3">${highlightTitle}</duet-heading>
-              ${
-                description ??
-                html`
-                <duet-paragraph>${description}</duet-paragraph>`
+                  <duet-icon
+                    shape="brand"
+                    size="x-large"
+                    background="primary-lighter"
+                    color="primary"
+                    name=${iconName}
+                  ></duet-icon>
+                `
+                  : nothing
               }
 
-              <duet-grid class="actions" direction="horizontal">
-                <!-- Buttons -->
-                ${
-                  actions?.length
-                    ? html`
-                      <div class="grid">
-                        ${actions?.map(
-                          action => html`
-                            <duet-button
-                              id=${action.fields.key}
-                              icon=${action.fields?.icon ?? nothing}
-                              icon-right
-                              variation="plain"
-                              external=${isUrlExternal(action.fields.url)}
-                              url=${getLinkUrl(action, this.protoButtonHandlers)}
-                              @click=${() => handleLinkClick(action, this.protoButtonHandlers)}
-                            >${action.fields.text ?? ""}
-                            </duet-button>
-                          `
-                        )}
-                      </div>
-                    `
-                    : nothing
-                }
-              </duet-grid>
+              <duet-heading level="h3">${highlightTitle}</duet-heading>
+
+              ${description ? html`<duet-paragraph>${description}</duet-paragraph>` : nothing}
+
+              <!-- Buttons -->
+              ${
+                actions?.length
+                  ? html`
+                  <div>
+                    ${actions.map(action => {
+                      const { fields } = action
+                      return html`
+                        <duet-button
+                          id=${fields.key}
+                          icon=${fields.icon ?? nothing}
+                          icon-right
+                          variation="plain"
+                          external=${isUrlExternal(fields.url)}
+                          url=${getLinkUrl(action, this.protoButtonHandlers)}
+                          @click=${() => handleLinkClick(action, this.protoButtonHandlers)}
+                        >
+                          ${fields.text ?? ""}
+                        </duet-button>
+                      `
+                    })}
+                  </div>
+                `
+                  : nothing
+              }
+
             </duet-grid-item>
           </duet-grid>
-        </duet-grid-item>
       `
       : nothing
   }

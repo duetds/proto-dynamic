@@ -2,14 +2,12 @@ import { css, html, LitElement, nothing } from "lit"
 import { customElement, property } from "lit/decorators.js"
 import { getLinkUrl, isUrlExternal } from "../utils/helper-functions"
 
+interface SysContentType {
+  sys: { id: string }
+}
+
 interface Sys {
-  sys: {
-    contentType: {
-      sys: {
-        id: string
-      }
-    }
-  }
+  sys: { contentType: SysContentType }
 }
 
 export interface ButtonResource extends Sys {
@@ -23,19 +21,21 @@ export interface ButtonResource extends Sys {
   }
 }
 
+interface LinkContent {
+  fields?: {
+    icon?: string
+    key?: string
+    text?: string
+    url?: string
+  }
+}
+
 interface ContentResource extends Sys {
   fields: {
     key?: string
     linkIconColorVariation?: string
     linkVariation?: string
-    content?: {
-      fields?: {
-        icon?: string
-        key?: string
-        text?: string
-        url?: string
-      }
-    }[]
+    content?: LinkContent[]
   }
 }
 
@@ -47,7 +47,7 @@ interface HeroFields {
   icon?: string
 }
 
-interface HeroItem {
+export interface HeroItem {
   fields?: HeroFields
 }
 
@@ -108,100 +108,77 @@ export class ProtoDynamicHero extends LitElement {
     const buttons = fields?.buttons
 
     return html`
-      <duet-page-heading
-        icon=${fields?.icon ?? nothing}
-        id="dynamichero_page-heading"
-        layout="auto"
-      >
-        <!-- Title -->
+      <duet-page-heading icon=${fields?.icon ?? nothing} layout="auto">
         ${
-          headingObject
-            ? html`
-              <duet-heading
-                data-testid="dynamichero_page-title"
-                id="dynamichero_page-title"
-                level="h1"
-                margin="none"
-                slot="heading"
-              >
-                ${headingObject}
-              </duet-heading>
-            `
-            : null
+          headingObject &&
+          html`
+          <duet-heading level="h1" slot="heading" margin="none">${headingObject}</duet-heading>`
         }
       </duet-page-heading>
 
-<!--TODO: When parent has wider grid-template, we need to set grid-template="sidebar-right" for this duet-grid-->
+
+      <!--TODO: When parent has wider grid-template, we need to set grid-template="sidebar-right" for this duet-grid-->
       <duet-grid>
-      <!-- Render if intro exists -->
-      ${
-        intoText
-          ? html`
+        ${
+          intoText &&
+          html`
             <div>
               ${intoText}
               <duet-spacer size="large"></duet-spacer>
-            </div>
-          `
-          : null
-      }
+            </div>`
+        }
 
-      <!--  TODO: Check if this main is required. LLA might've forgotten it   -->
-      <div slot="main">
-        <!-- Custom content -->
-        <slot></slot>
-      </div>
+        <!--  TODO: Check if this main is required. LLA might've forgotten it   -->
+        <div slot="main">
+          <!-- Custom content -->
+          <slot></slot>
+        </div>
 
-      <!-- Dynamic Group -->
-      ${
-        content?.length && content.length > 0
-          ? html`
-            <div
-              class="grid"
-              data-testid="dynamichero_content"
-              id="dynamichero_content"
-            >
-              ${content.map(content => {
-                return html`
+        <!-- Dynamic Group -->
+        ${
+          content?.length
+            ? html`
+              <div class="grid" id="dynamichero_content">
+                ${content.map(item => {
+                  const fields = item.fields.content?.[0]?.fields ?? {}
+                  return html`
                     <duet-link
-                      id=${content.fields.key ?? nothing}
-                      icon=${content.fields.content?.[0]?.fields?.icon ?? nothing}
-                      icon-color=${content.fields.linkIconColorVariation ?? nothing}
-                      variation=${content.fields.linkVariation ?? nothing}
-                      url=${content.fields.content?.[0]?.fields?.url ?? nothing}
+                      id=${item.fields.key ?? nothing}
+                      icon=${fields.icon ?? nothing}
+                      icon-color=${item.fields.linkIconColorVariation ?? nothing}
+                      variation=${item.fields.linkVariation ?? nothing}
+                      url=${fields.url ?? nothing}
                     >
-                      ${content.fields.content?.[0]?.fields?.text ?? ""}
+                      ${fields.text ?? ""}
                     </duet-link>
                   `
-              })}
-            </div>
-          `
-          : nothing
-      }
+                })}
+              </div>
+            `
+            : nothing
+        }
       </duet-grid>
-      
+
       <!-- Buttons -->
       ${
         buttons?.length
           ? html`
-            <div
-              class="grid"
-              id="dynamichero_buttons"
-            >
-              ${buttons.map(button => {
-                return html`
-                    <duet-link
-                      id=${button.fields.key ?? nothing}
-                      icon=${button.fields.icon ?? nothing}
-                      url=${getLinkUrl(button, this.protoButtonHandlers)}
-                      variation="button"
-                      external=${isUrlExternal(button.fields.url)}
-                    >
-                      ${button.fields.text ?? ""}
-                    </duet-link>
-                  `
-              })}
-            </div>
-          `
+          <div class="grid" id="dynamichero_buttons">
+            ${buttons.map(
+              ({ fields }) => html`
+              <duet-link
+                id=${fields.key ?? nothing}
+                icon=${fields.icon ?? nothing}
+                url=${getLinkUrl({ fields }, this.protoButtonHandlers)}
+                variation="button"
+                external=${isUrlExternal(fields.url)}
+              >
+                ${fields.text ?? ""}
+              </duet-link>
+            `
+            )}
+          </div>
+        `
           : nothing
       }
 
