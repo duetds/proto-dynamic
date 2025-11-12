@@ -61,7 +61,12 @@ export interface ProtoButtonHandler {
 export declare class ProtoDynamicHero extends LitElement {
     props?: HeroItem[];
     protoButtonHandlers?: ProtoButtonHandler[];
-    static styles: import("lit").CSSResult;
+    isParentLarge: boolean;
+    isLargeScreen: boolean;
+    private _mediaQuery?;
+    connectedCallback(): void;
+    disconnectedCallback(): void;
+    private _onMediaChange;
     render(): import("lit-html").TemplateResult<1>;
 }
 export {};

@@ -5,6 +5,10 @@ import type { HighlightItem } from "../highlight/proto-dynamic-highlight"
 
 type ButtonLinkedItem = GroupItem | HighlightItem
 
+/* -------------------------------------------------------
+ * Proto button handlers & URL helpers
+ * ----------------------------------------------------- */
+
 export function isUrlExternal(url: string | undefined): boolean {
   return !!url?.includes("https://")
 }
@@ -15,7 +19,6 @@ export function getProtoButtonHandler(item: ButtonLinkedItem, protoButtonHandler
 
 export function getLinkUrl(item: ButtonLinkedItem, protoButtonHandlers?: ProtoButtonHandler[]) {
   const button = getProtoButtonHandler(item, protoButtonHandlers)
-  console.log("BUTTON", button)
   return button?.url || item.fields.url || nothing
 }
 

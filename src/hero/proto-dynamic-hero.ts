@@ -1,4 +1,4 @@
-import { css, html, LitElement, nothing } from "lit"
+import { html, LitElement, nothing } from "lit"
 import { customElement, property } from "lit/decorators.js"
 import { getLinkUrl, isUrlExternal } from "../utils/helper-functions"
 
@@ -61,109 +61,69 @@ export interface ProtoButtonHandler {
 export class ProtoDynamicHero extends LitElement {
   @property({ type: Array }) props?: HeroItem[]
   @property({ type: Array }) protoButtonHandlers?: ProtoButtonHandler[] // Button URLs are only for proto use
+  @property({ type: Boolean }) isParentLarge = false
+  @property({ type: Boolean }) isLargeScreen = false
 
-  // TODO: fix these custom styles with duet props
-  static override styles = css`
-    /* Only display the spacer in heading if a "back link" is present */
+  private _mediaQuery?: MediaQueryList
 
-    duet-page-heading div[slot='heading'] > duet-spacer:first-child {
-      display: none;
+  override connectedCallback() {
+    super.connectedCallback()
+
+    const parentGrid = this.closest("duet-grid")
+    const gridTemplate = parentGrid?.getAttribute("grid-template")
+
+    if (gridTemplate === "large") {
+      this.isParentLarge = true
+      this._mediaQuery = window.matchMedia("(min-width: 1220px)")
+      this.isLargeScreen = this._mediaQuery.matches
+      this._mediaQuery.addEventListener("change", this._onMediaChange)
     }
+  }
 
-    /* Only display the after-content spacer if content is present */
+  override disconnectedCallback() {
+    super.disconnectedCallback()
+    this._mediaQuery?.removeEventListener("change", this._onMediaChange)
+  }
 
-    div[slot='main'] > duet-spacer + duet-spacer:last-child {
-      display: none;
-    }
-
-    .grid {
-      display: grid;
-      grid-template-columns: 1fr;
-      max-width: 100%;
-      align-items: center;
-    }
-
-    @media (min-width: 48em) {
-      .grid {
-        grid-template-columns: 1fr 1fr;
-        column-gap: 12px;
-        row-gap: 8px;
-      }
-    }
-
-    @media (min-width: 62em) {
-      .grid {
-        grid-template-columns: 1fr 1fr 1fr;
-        column-gap: 12px;
-        row-gap: 8px;
-      }
-    }
-  `
+  private _onMediaChange = (event: MediaQueryListEvent) => {
+    this.isLargeScreen = event.matches
+  }
 
   override render() {
     const fields = this.props?.[0]?.fields
-    const headingObject = fields?.heading
-    const intoText = fields?.intro?.content[0].content[0]?.value
-    const content = fields?.content
-    const buttons = fields?.buttons
+    const { heading, intro, buttons, icon } = fields ?? {}
+    const subTitleText = intro?.content?.[0]?.content?.[0]?.value ?? ""
 
     return html`
-      <duet-page-heading icon=${fields?.icon ?? nothing} layout="auto">
+      <duet-page-heading icon=${icon ?? nothing} layout="auto">
         ${
-          headingObject &&
+          heading &&
           html`
-          <duet-heading level="h1" slot="heading" margin="none">${headingObject}</duet-heading>`
+          <duet-heading level="h1" slot="heading" margin="none">${heading}</duet-heading>`
         }
       </duet-page-heading>
 
-
-      <!--TODO: When parent has wider grid-template, we need to set grid-template="sidebar-right" for this duet-grid-->
-      <duet-grid>
+      <duet-grid grid-template=${this.isParentLarge && this.isLargeScreen ? "sidebar-right" : nothing}>
         ${
-          intoText &&
+          subTitleText &&
           html`
-            <div>
-              ${intoText}
+            <duet-paragraph>
+              ${subTitleText}
               <duet-spacer size="large"></duet-spacer>
-            </div>`
+            </duet-paragraph>`
         }
 
-        <!--  TODO: Check if this main is required. LLA might've forgotten it   -->
         <div slot="main">
           <!-- Custom content -->
           <slot></slot>
         </div>
-
-        <!-- Dynamic Group -->
-        ${
-          content?.length
-            ? html`
-              <div class="grid" id="dynamichero_content">
-                ${content.map(item => {
-                  const fields = item.fields.content?.[0]?.fields ?? {}
-                  return html`
-                    <duet-link
-                      id=${item.fields.key ?? nothing}
-                      icon=${fields.icon ?? nothing}
-                      icon-color=${item.fields.linkIconColorVariation ?? nothing}
-                      variation=${item.fields.linkVariation ?? nothing}
-                      url=${fields.url ?? nothing}
-                    >
-                      ${fields.text ?? ""}
-                    </duet-link>
-                  `
-                })}
-              </div>
-            `
-            : nothing
-        }
       </duet-grid>
 
       <!-- Buttons -->
       ${
         buttons?.length
           ? html`
-          <div class="grid" id="dynamichero_buttons">
+          <duet-grid grid-template="button-grid"  id="dynamichero_buttons">
             ${buttons.map(
               ({ fields }) => html`
               <duet-link
@@ -177,7 +137,7 @@ export class ProtoDynamicHero extends LitElement {
               </duet-link>
             `
             )}
-          </div>
+          </duet-grid>
         `
           : nothing
       }

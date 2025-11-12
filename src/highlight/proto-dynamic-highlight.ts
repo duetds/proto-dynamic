@@ -95,11 +95,11 @@ export class ProtoDynamicHighlight extends LitElement {
               ${
                 actions?.length
                   ? html`
-                  <div>
                     ${actions.map(action => {
                       const { fields } = action
                       return html`
                         <duet-button
+                          fixed
                           id=${fields.key}
                           icon=${fields.icon ?? nothing}
                           icon-right
@@ -112,7 +112,6 @@ export class ProtoDynamicHighlight extends LitElement {
                         </duet-button>
                       `
                     })}
-                  </div>
                 `
                   : nothing
               }
