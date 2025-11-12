@@ -18,7 +18,7 @@ interface DynamicLayoutProps {
 @customElement("proto-dynamic-layout")
 export class ProtoDynamicLayout extends LitElement {
   @property({ type: Object }) props?: DynamicLayoutProps
-  @property({ type: Array }) protoButtonHandlers?: ProtoButtonHandler[] // Button URLs are only for proto use
+  @property({ type: Array }) protoButtonHandlers?: ProtoButtonHandler[] // Overrides button behavior for prototype use
 
   override render() {
     const dynamicComponents = this.props?.__dynamicLayout

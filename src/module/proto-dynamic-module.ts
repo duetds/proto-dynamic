@@ -28,7 +28,7 @@ interface ActionEntry {
 @customElement("proto-dynamic-module")
 export class ProtoDynamicModule extends LitElement {
   @property({ type: Array }) props?: ModuleProps[]
-  @property({ type: Array }) protoButtonHandlers?: ProtoButtonHandler[] // Button URLs are only for proto use
+  @property({ type: Array }) protoButtonHandlers?: ProtoButtonHandler[] // Overrides button behavior for prototype use
 
   static override styles = css`
    .no-padding {

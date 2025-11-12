@@ -38,7 +38,7 @@ export interface ActionEntry {
 @customElement("proto-dynamic-highlight")
 export class ProtoDynamicHighlight extends LitElement {
   @property({ type: Object }) props?: HighlightItem
-  @property({ type: Array }) protoButtonHandlers?: ProtoButtonHandler[] // Button URLs are only for proto use
+  @property({ type: Array }) protoButtonHandlers?: ProtoButtonHandler[] // Overrides button behavior for prototype use
 
   static override styles = css`
       .actions {

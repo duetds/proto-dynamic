@@ -60,10 +60,10 @@ export interface ProtoButtonHandler {
 @customElement("proto-dynamic-hero")
 export class ProtoDynamicHero extends LitElement {
   @property({ type: Array }) props?: HeroItem[]
-  @property({ type: Array }) protoButtonHandlers?: ProtoButtonHandler[] // Button URLs are only for proto use
-  @property({ type: Boolean }) isParentLarge = false
-  @property({ type: Boolean }) isLargeScreen = false
-
+  @property({ type: Array }) protoButtonHandlers?: ProtoButtonHandler[] // Overrides button behavior for prototype use
+  @property({ type: Boolean })
+  private isLargeScreen = false
+  private isParentLarge = false // Parent grids with wider grid-template settings require narrower text fields.
   private _mediaQuery?: MediaQueryList
 
   override connectedCallback() {
@@ -74,7 +74,7 @@ export class ProtoDynamicHero extends LitElement {
 
     if (gridTemplate === "large") {
       this.isParentLarge = true
-      this._mediaQuery = window.matchMedia("(min-width: 1220px)")
+      this._mediaQuery = window.matchMedia("(min-width: 1220px)") // Duet media-query-xx-large
       this.isLargeScreen = this._mediaQuery.matches
       this._mediaQuery.addEventListener("change", this._onMediaChange)
     }
@@ -112,13 +112,11 @@ export class ProtoDynamicHero extends LitElement {
               <duet-spacer size="large"></duet-spacer>
             </duet-paragraph>`
         }
-
-        <div slot="main">
-          <!-- Custom content -->
-          <slot></slot>
-        </div>
       </duet-grid>
 
+      <!-- Custom content -->
+      <slot name="main"></slot>
+      
       <!-- Buttons -->
       ${
         buttons?.length

@@ -61,8 +61,8 @@ export interface ProtoButtonHandler {
 export declare class ProtoDynamicHero extends LitElement {
     props?: HeroItem[];
     protoButtonHandlers?: ProtoButtonHandler[];
-    isParentLarge: boolean;
-    isLargeScreen: boolean;
+    private isLargeScreen;
+    private isParentLarge;
     private _mediaQuery?;
     connectedCallback(): void;
     disconnectedCallback(): void;

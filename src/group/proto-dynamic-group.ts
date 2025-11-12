@@ -18,7 +18,7 @@ interface GroupItemFields extends HighlightFields {
 @customElement("proto-dynamic-group")
 export class ProtoDynamicGroup extends LitElement {
   @property({ type: Object }) props?: GroupItem
-  @property({ type: Array }) protoButtonHandlers?: ProtoButtonHandler[] // Button URLs are only for proto use
+  @property({ type: Array }) protoButtonHandlers?: ProtoButtonHandler[] // Overrides button behavior for prototype use
 
   // TODO: check if possible to remove horizontal padding without ::part
   static override styles = css`
