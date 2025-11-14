@@ -18,7 +18,7 @@ interface DynamicLayoutProps {
 @customElement("proto-dynamic-layout")
 export class ProtoDynamicLayout extends LitElement {
   @property({ type: Object }) props?: DynamicLayoutProps
-  @property({ type: Array }) protoButtonHandlers?: ProtoButtonHandler[] // Button URLs are only for proto use
+  @property({ type: Array }) protoButtonHandlers?: ProtoButtonHandler[] // Overrides button behavior for prototype use
 
   override render() {
     const dynamicComponents = this.props?.__dynamicLayout
@@ -26,11 +26,12 @@ export class ProtoDynamicLayout extends LitElement {
 
     return html`
       ${dynamicComponents.map(component => {
-        const container = this.props?.[component.key] as DynamicComponentContainer | undefined
-        const data = container?.__dynamicComponent
-
+        const data = (this.props?.[component.key] as DynamicComponentContainer)?.__dynamicComponent
         return html`
-          <proto-dynamic-module .protoButtonHandlers=${this.protoButtonHandlers} .props=${data}></proto-dynamic-module>
+          <proto-dynamic-module
+            .protoButtonHandlers=${this.protoButtonHandlers}
+            .props=${data}
+          ></proto-dynamic-module>
         `
       })}
     `

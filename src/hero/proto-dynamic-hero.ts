@@ -1,15 +1,13 @@
-import { css, html, LitElement, nothing } from "lit"
+import { html, LitElement, nothing } from "lit"
 import { customElement, property } from "lit/decorators.js"
 import { getLinkUrl, isUrlExternal } from "../utils/helper-functions"
 
+interface SysContentType {
+  sys: { id: string }
+}
+
 interface Sys {
-  sys: {
-    contentType: {
-      sys: {
-        id: string
-      }
-    }
-  }
+  sys: { contentType: SysContentType }
 }
 
 export interface ButtonResource extends Sys {
@@ -23,19 +21,21 @@ export interface ButtonResource extends Sys {
   }
 }
 
+interface LinkContent {
+  fields?: {
+    icon?: string
+    key?: string
+    text?: string
+    url?: string
+  }
+}
+
 interface ContentResource extends Sys {
   fields: {
     key?: string
     linkIconColorVariation?: string
     linkVariation?: string
-    content?: {
-      fields?: {
-        icon?: string
-        key?: string
-        text?: string
-        url?: string
-      }
-    }[]
+    content?: LinkContent[]
   }
 }
 
@@ -47,7 +47,7 @@ interface HeroFields {
   icon?: string
 }
 
-interface HeroItem {
+export interface HeroItem {
   fields?: HeroFields
 }
 
@@ -60,148 +60,83 @@ export interface ProtoButtonHandler {
 @customElement("proto-dynamic-hero")
 export class ProtoDynamicHero extends LitElement {
   @property({ type: Array }) props?: HeroItem[]
-  @property({ type: Array }) protoButtonHandlers?: ProtoButtonHandler[] // Button URLs are only for proto use
+  @property({ type: Array }) protoButtonHandlers?: ProtoButtonHandler[] // Overrides button behavior for prototype use
+  @property({ type: Boolean })
+  private isLargeScreen = false
+  private isParentLarge = false // Parent grids with wider grid-template settings require narrower text fields.
+  private _mediaQuery?: MediaQueryList
 
-  // TODO: fix these custom styles with duet props
-  static override styles = css`
-    /* Only display the spacer in heading if a "back link" is present */
+  override connectedCallback() {
+    super.connectedCallback()
 
-    duet-page-heading div[slot='heading'] > duet-spacer:first-child {
-      display: none;
+    const parentGrid = this.closest("duet-grid")
+    const gridTemplate = parentGrid?.getAttribute("grid-template")
+
+    if (gridTemplate === "large") {
+      this.isParentLarge = true
+      this._mediaQuery = window.matchMedia("(min-width: 1220px)") // Duet media-query-xx-large
+      this.isLargeScreen = this._mediaQuery.matches
+      this._mediaQuery.addEventListener("change", this._onMediaChange)
     }
+  }
 
-    /* Only display the after-content spacer if content is present */
+  override disconnectedCallback() {
+    super.disconnectedCallback()
+    this._mediaQuery?.removeEventListener("change", this._onMediaChange)
+  }
 
-    div[slot='main'] > duet-spacer + duet-spacer:last-child {
-      display: none;
-    }
-
-    .grid {
-      display: grid;
-      grid-template-columns: 1fr;
-      max-width: 100%;
-      align-items: center;
-    }
-
-    @media (min-width: 48em) {
-      .grid {
-        grid-template-columns: 1fr 1fr;
-        column-gap: 12px;
-        row-gap: 8px;
-      }
-    }
-
-    @media (min-width: 62em) {
-      .grid {
-        grid-template-columns: 1fr 1fr 1fr;
-        column-gap: 12px;
-        row-gap: 8px;
-      }
-    }
-  `
+  private _onMediaChange = (event: MediaQueryListEvent) => {
+    this.isLargeScreen = event.matches
+  }
 
   override render() {
     const fields = this.props?.[0]?.fields
-    const headingObject = fields?.heading
-    const intoText = fields?.intro?.content[0].content[0]?.value
-    const content = fields?.content
-    const buttons = fields?.buttons
+    const { heading, intro, buttons, icon } = fields ?? {}
+    const subTitleText = intro?.content?.[0]?.content?.[0]?.value ?? ""
 
     return html`
-      <duet-page-heading
-        icon=${fields?.icon ?? nothing}
-        id="dynamichero_page-heading"
-        layout="auto"
-      >
-        <!-- Title -->
+      <duet-page-heading icon=${icon ?? nothing} layout="auto">
         ${
-          headingObject
-            ? html`
-              <duet-heading
-                data-testid="dynamichero_page-title"
-                id="dynamichero_page-title"
-                level="h1"
-                margin="none"
-                slot="heading"
-              >
-                ${headingObject}
-              </duet-heading>
-            `
-            : null
+          heading &&
+          html`
+          <duet-heading level="h1" slot="heading" margin="none">${heading}</duet-heading>`
         }
       </duet-page-heading>
 
-<!--TODO: When parent has wider grid-template, we need to set grid-template="sidebar-right" for this duet-grid-->
-      <duet-grid>
-      <!-- Render if intro exists -->
-      ${
-        intoText
-          ? html`
-            <div>
-              ${intoText}
+      <duet-grid grid-template=${this.isParentLarge && this.isLargeScreen ? "sidebar-right" : nothing}>
+        ${
+          subTitleText &&
+          html`
+            <duet-paragraph>
+              ${subTitleText}
               <duet-spacer size="large"></duet-spacer>
-            </div>
-          `
-          : null
-      }
-
-      <!--  TODO: Check if this main is required. LLA might've forgotten it   -->
-      <div slot="main">
-        <!-- Custom content -->
-        <slot></slot>
-      </div>
-
-      <!-- Dynamic Group -->
-      ${
-        content?.length && content.length > 0
-          ? html`
-            <div
-              class="grid"
-              data-testid="dynamichero_content"
-              id="dynamichero_content"
-            >
-              ${content.map(content => {
-                return html`
-                    <duet-link
-                      id=${content.fields.key ?? nothing}
-                      icon=${content.fields.content?.[0]?.fields?.icon ?? nothing}
-                      icon-color=${content.fields.linkIconColorVariation ?? nothing}
-                      variation=${content.fields.linkVariation ?? nothing}
-                      url=${content.fields.content?.[0]?.fields?.url ?? nothing}
-                    >
-                      ${content.fields.content?.[0]?.fields?.text ?? ""}
-                    </duet-link>
-                  `
-              })}
-            </div>
-          `
-          : nothing
-      }
+            </duet-paragraph>`
+        }
       </duet-grid>
+
+      <!-- Custom content -->
+      <slot name="main"></slot>
       
       <!-- Buttons -->
       ${
         buttons?.length
           ? html`
-            <div
-              class="grid"
-              id="dynamichero_buttons"
-            >
-              ${buttons.map(button => {
-                return html`
-                    <duet-link
-                      id=${button.fields.key ?? nothing}
-                      icon=${button.fields.icon ?? nothing}
-                      url=${getLinkUrl(button, this.protoButtonHandlers)}
-                      variation="button"
-                      external=${isUrlExternal(button.fields.url)}
-                    >
-                      ${button.fields.text ?? ""}
-                    </duet-link>
-                  `
-              })}
-            </div>
-          `
+          <duet-grid grid-template="button-grid"  id="dynamichero_buttons">
+            ${buttons.map(
+              ({ fields }) => html`
+              <duet-link
+                id=${fields.key ?? nothing}
+                icon=${fields.icon ?? nothing}
+                url=${getLinkUrl({ fields }, this.protoButtonHandlers)}
+                variation="button"
+                external=${isUrlExternal(fields.url)}
+              >
+                ${fields.text ?? ""}
+              </duet-link>
+            `
+            )}
+          </duet-grid>
+        `
           : nothing
       }
 

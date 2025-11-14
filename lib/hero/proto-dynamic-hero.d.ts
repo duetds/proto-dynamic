@@ -1,11 +1,12 @@
 import { LitElement } from "lit";
+interface SysContentType {
+    sys: {
+        id: string;
+    };
+}
 interface Sys {
     sys: {
-        contentType: {
-            sys: {
-                id: string;
-            };
-        };
+        contentType: SysContentType;
     };
 }
 export interface ButtonResource extends Sys {
@@ -18,19 +19,20 @@ export interface ButtonResource extends Sys {
         variation?: string;
     };
 }
+interface LinkContent {
+    fields?: {
+        icon?: string;
+        key?: string;
+        text?: string;
+        url?: string;
+    };
+}
 interface ContentResource extends Sys {
     fields: {
         key?: string;
         linkIconColorVariation?: string;
         linkVariation?: string;
-        content?: {
-            fields?: {
-                icon?: string;
-                key?: string;
-                text?: string;
-                url?: string;
-            };
-        }[];
+        content?: LinkContent[];
     };
 }
 interface HeroFields {
@@ -48,7 +50,7 @@ interface HeroFields {
     buttons?: ButtonResource[];
     icon?: string;
 }
-interface HeroItem {
+export interface HeroItem {
     fields?: HeroFields;
 }
 export interface ProtoButtonHandler {
@@ -59,7 +61,12 @@ export interface ProtoButtonHandler {
 export declare class ProtoDynamicHero extends LitElement {
     props?: HeroItem[];
     protoButtonHandlers?: ProtoButtonHandler[];
-    static styles: import("lit").CSSResult;
+    private isLargeScreen;
+    private isParentLarge;
+    private _mediaQuery?;
+    connectedCallback(): void;
+    disconnectedCallback(): void;
+    private _onMediaChange;
     render(): import("lit-html").TemplateResult<1>;
 }
 export {};

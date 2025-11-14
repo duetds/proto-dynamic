@@ -12,12 +12,12 @@ export interface HighlightFields {
     style?: string;
     url?: string;
 }
-interface RichTextDocument {
+export interface RichTextDocument {
     content: RichTextNode[];
 }
-interface RichTextNode {
-    content?: RichTextNode[];
+export interface RichTextNode {
     value?: string;
+    content?: RichTextNode[];
 }
 export interface ActionEntry {
     fields: {
@@ -31,7 +31,6 @@ export declare class ProtoDynamicHighlight extends LitElement {
     props?: HighlightItem;
     protoButtonHandlers?: ProtoButtonHandler[];
     static styles: import("lit").CSSResult;
-    render(): typeof nothing | import("lit-html").TemplateResult<1>;
+    render(): import("lit-html").TemplateResult<1> | typeof nothing;
 }
-export {};
 //# sourceMappingURL=proto-dynamic-highlight.d.ts.map
