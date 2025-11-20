@@ -112,14 +112,14 @@ export class ProtoDynamicHero extends LitElement {
         ${
           heading
             ? html`
-            <duet-heading
-              level="h1"
-              visual-level=${this.isParentLarge ? "h1" : "h2"}
-              slot="heading"
-              margin="none"
-            >${heading}
-            </duet-heading
-            >`
+              <duet-heading
+                level="h1"
+                visual-level=${this.isParentLarge ? "h1" : "h2"}
+                slot="heading"
+                margin="none"
+              >${heading}
+              </duet-heading
+              >`
             : nothing
         }
       </duet-page-heading>
@@ -169,24 +169,10 @@ export class ProtoDynamicHero extends LitElement {
           : nothing
       }
 
-      <!--Dynamic modal-->
-      <duet-modal
-        heading=${this.entryFields?.heading}
-        icon=${this.entryFields?.icon}
-        id=${this.currentModalEntryId}
-      >
-        <duet-spacer size="large"></duet-spacer>
-
-        ${(this.entryFields?.body?.content ?? []).map(
-          node => html`
-            <div>
-              ${unsafeHTML(renderRichText(node))}
-              <duet-divider margin="none"></duet-divider>
-              <duet-spacer size="medium"></duet-spacer>
-            </div>
-          `
-        )}
-      </duet-modal>
+      <proto-dynamic-modal
+        .entryFields=${this.entryFields}
+        .currentModalEntryId=${this.currentModalEntryId}
+      ></proto-dynamic-modal>
     `
   }
 }
