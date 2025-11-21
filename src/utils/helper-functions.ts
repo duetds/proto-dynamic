@@ -77,9 +77,12 @@ export const renderRichText = (input: RichTextNode | RichTextNode[], data?: Reco
           case "componentRichTextVariable":
             return String(data?.[key] ?? `{{${key}}}`)
           case "buttonResource":
+            //icon comes in json, but variation not TODO: see what Oskari answers and update variable
+            // ticketti, tyyppien eristämisestä omaan filuun
             if (entry?.sys.contentType.sys.id === "dynamicModal") {
+              console.log("ENTRY: ", entry)
               return `<duet-button
-              icon="messaging-info"
+              icon=${entry.fields.icon} 
               variation="plain"
               margin="none"
               onclick='this.dispatchEvent(new CustomEvent("open-dynamic-modal", {

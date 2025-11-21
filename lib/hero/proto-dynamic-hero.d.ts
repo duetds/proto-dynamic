@@ -12,15 +12,11 @@ export interface EntryFields {
         content: RichTextNode[];
     };
 }
-export interface DynamicModal extends CustomEvent {
+export interface DynamicModalEvent extends CustomEvent {
     detail: {
         entryId: string;
         fields: EntryFields;
     };
-}
-export interface DuetModal extends HTMLElement {
-    show: () => void;
-    hide: () => void;
 }
 export interface ProtoButtonHandler {
     buttonId: string;
@@ -61,7 +57,7 @@ export declare class ProtoDynamicHero extends LitElement {
     connectedCallback(): void;
     disconnectedCallback(): void;
     private _onMediaChange;
-    openDynamicModal: (event: DynamicModal) => Promise<void>;
+    openDynamicModal: (event: DynamicModalEvent) => Promise<void>;
     render(): import("lit-html").TemplateResult<1>;
 }
 //# sourceMappingURL=proto-dynamic-hero.d.ts.map

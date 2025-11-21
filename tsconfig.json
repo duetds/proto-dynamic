@@ -29,8 +29,11 @@
     ],
     "types": [
       "mocha"
-    ],
+    ]
   },
-  "include": ["src/**/*.ts"],
+  "include": [
+    "src/**/*.ts",
+    "node_modules/@duetds/components/lib/types/components.d.ts"
+  ],
   "exclude": []
 }

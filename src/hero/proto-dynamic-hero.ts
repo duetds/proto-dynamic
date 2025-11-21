@@ -16,16 +16,11 @@ export interface EntryFields {
   body?: { content: RichTextNode[] }
 }
 
-export interface DynamicModal extends CustomEvent {
+export interface DynamicModalEvent extends CustomEvent {
   detail: {
     entryId: string
     fields: EntryFields
   }
-}
-
-export interface DuetModal extends HTMLElement {
-  show: () => void
-  hide: () => void
 }
 
 export interface ProtoButtonHandler {
@@ -69,7 +64,7 @@ export class ProtoDynamicHero extends LitElement {
     super.connectedCallback()
 
     this.addEventListener("open-dynamic-modal", async (e: Event) => {
-      await this.openDynamicModal(e as DynamicModal)
+      await this.openDynamicModal(e as DynamicModalEvent)
     })
 
     const parentGrid = this.closest("duet-grid")
@@ -92,13 +87,13 @@ export class ProtoDynamicHero extends LitElement {
     this.isLargeScreen = event.matches
   }
 
-  openDynamicModal = async (event: DynamicModal) => {
+  openDynamicModal = async (event: DynamicModalEvent) => {
     this.currentModalEntryId = event.detail.entryId
     this.entryFields = event.detail.fields
 
     await this.updateComplete
 
-    const dynamicModal = document.getElementById(this.currentModalEntryId) as DuetModal
+    const dynamicModal = document.getElementById(this.currentModalEntryId) as HTMLDuetModalElement
     dynamicModal?.show()
   }
 
