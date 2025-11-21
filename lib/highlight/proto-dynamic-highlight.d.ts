@@ -31,6 +31,6 @@ export declare class ProtoDynamicHighlight extends LitElement {
     props?: HighlightItem;
     protoButtonHandlers?: ProtoButtonHandler[];
     static styles: import("lit").CSSResult;
-    render(): import("lit-html").TemplateResult<1> | typeof nothing;
+    render(): typeof nothing | import("lit-html").TemplateResult<1>;
 }
 //# sourceMappingURL=proto-dynamic-highlight.d.ts.map
