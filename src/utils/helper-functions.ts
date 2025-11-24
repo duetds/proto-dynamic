@@ -33,6 +33,23 @@ export function handleLinkClick(item: ButtonLinkedItem, protoButtonHandlers?: Pr
  * RichText content handler
  * ----------------------------------------------------- */
 
+const transformVariation = (resourceType: string) => {
+  switch (resourceType) {
+    case "button-primary":
+      return "primary"
+    case "button-default":
+      return "default"
+    case "button-plain":
+      return "plain"
+    case "link-plain":
+      return "default"
+    case "link-button":
+      return "button"
+    default:
+      return "default"
+  }
+}
+
 export const renderRichText = (input: RichTextNode | RichTextNode[], data?: Record<string, unknown>): string => {
   if (!input) return ""
 
@@ -77,13 +94,10 @@ export const renderRichText = (input: RichTextNode | RichTextNode[], data?: Reco
           case "componentRichTextVariable":
             return String(data?.[key] ?? `{{${key}}}`)
           case "buttonResource":
-            //icon comes in json, but variation not TODO: see what Oskari answers and update variable
-            // ticketti, tyyppien eristämisestä omaan filuun
             if (entry?.sys.contentType.sys.id === "dynamicModal") {
-              console.log("ENTRY: ", entry)
               return `<duet-button
-              icon=${entry.fields.icon} 
-              variation="plain"
+              icon=${target.fields.icon} 
+              variation=${transformVariation(target.fields.richTextAppearance)}
               margin="none"
               onclick='this.dispatchEvent(new CustomEvent("open-dynamic-modal", {
                 detail: { entryId: "${entry.sys.id}", fields: ${JSON.stringify(entry.fields)} },
