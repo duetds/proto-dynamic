@@ -33,4 +33,4 @@ export declare class ProtoDynamicHighlight extends LitElement {
     static styles: import("lit").CSSResult;
     render(): import("lit-html").TemplateResult<1> | typeof nothing;
 }
-//# sourceMappingURL=proto-dynamic-highlight.d.ts.map
+//# sourceMappingURL=proto-dynamic-notice.d.ts.map
