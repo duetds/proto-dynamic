@@ -6,7 +6,9 @@ import { getLinkUrl, isUrlExternal, renderRichText } from "../utils/helper-funct
 export interface RichTextNode {
   nodeType?: string
   value?: string
-  data?: object
+  data?: {
+    uri?: string
+  }
   content?: RichTextNode[]
 }
 

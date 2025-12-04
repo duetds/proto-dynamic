@@ -1,11 +1,11 @@
-import { html, LitElement } from "lit"
+import { html, LitElement, nothing } from "lit"
 import { customElement, property } from "lit/decorators.js"
-import type { RichTextDocument } from "../highlight/proto-dynamic-highlight"
+import type { RichTextNode } from "../hero/proto-dynamic-hero"
 
 export interface AlertNotice {
   fields: {
     variation: string
-    message: RichTextDocument
+    message?: { content: { content: RichTextNode[] }[] }
   }
 }
 
@@ -16,9 +16,29 @@ export class ProtoDynamicNotice extends LitElement {
   override render() {
     const fields = this.props?.fields
     const variation = fields?.variation
-    const text = fields?.message?.content?.[0]?.content?.[0]?.value
+    const messageNodes = fields?.message?.content?.[0]?.content ?? []
+
     return html`
-      <duet-alert margin="none" variation=${variation}>${text}</duet-alert>
+      <duet-alert margin="none" variation=${variation}>
+        <duet-paragraph>
+          ${messageNodes.map(node => {
+            if (node.nodeType === "text") {
+              return node.value ?? nothing
+            }
+
+            if (node.nodeType === "hyperlink") {
+              return html`
+                <duet-link url=${node.data?.uri ?? nothing}>
+                  ${node.content?.[0]?.value ?? nothing}
+                </duet-link>
+              `
+            }
+
+            return nothing
+          })}
+        </duet-paragraph>
+      </duet-alert>
+
     `
   }
 }
