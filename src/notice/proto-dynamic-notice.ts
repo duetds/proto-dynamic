@@ -20,7 +20,6 @@ export class ProtoDynamicNotice extends LitElement {
 
     return html`
       <duet-alert margin="none" variation=${variation}>
-        <duet-paragraph>
           ${messageNodes.map(node => {
             if (node.nodeType === "text") {
               return node.value ?? nothing
@@ -36,7 +35,6 @@ export class ProtoDynamicNotice extends LitElement {
 
             return nothing
           })}
-        </duet-paragraph>
       </duet-alert>
 
     `
