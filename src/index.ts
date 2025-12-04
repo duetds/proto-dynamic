@@ -4,6 +4,7 @@ import { ProtoDynamicHighlight } from "./highlight/proto-dynamic-highlight"
 import { ProtoDynamicLayout } from "./layout/proto-dynamic-layout"
 import { ProtoDynamicModal } from "./modal/proto-dynamic-modal"
 import { ProtoDynamicModule } from "./module/proto-dynamic-module"
+import { ProtoDynamicNotice } from "./notice/proto-dynamic-notice"
 
 export {
   ProtoDynamicHero,
@@ -12,4 +13,5 @@ export {
   ProtoDynamicModule,
   ProtoDynamicLayout,
   ProtoDynamicModal,
+  ProtoDynamicNotice,
 }

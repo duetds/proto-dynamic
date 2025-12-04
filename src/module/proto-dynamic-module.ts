@@ -58,6 +58,10 @@ export class ProtoDynamicModule extends LitElement {
             .protoButtonHandlers=${protoButtonHandlers}
             .props=${item}>
           </proto-dynamic-group>`
+        case "alert":
+          return html`<proto-dynamic-notice
+            .props=${item}>
+          </proto-dynamic-notice>`
         default:
           return nothing
       }

@@ -2,7 +2,9 @@ import { LitElement } from "lit";
 export interface RichTextNode {
     nodeType?: string;
     value?: string;
-    data?: object;
+    data?: {
+        uri?: string;
+    };
     content?: RichTextNode[];
 }
 export interface EntryFields {
