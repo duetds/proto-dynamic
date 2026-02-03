@@ -9,6 +9,8 @@ interface GroupItemFields extends HighlightFields {
     content?: ActionEntry[];
     linkVariation?: string;
     linkIconColorVariation?: string;
+    headingVisualLevel?: string;
+    accessibilityHeading?: string;
 }
 export declare class ProtoDynamicGroup extends LitElement {
     props?: GroupItem;

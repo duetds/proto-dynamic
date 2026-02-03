@@ -129,7 +129,7 @@ export class ProtoDynamicHero extends LitElement {
         if (node.nodeType === "text") {
           return html`
             <duet-grid grid-template=${this.isParentLarge && this.isLargeScreen ? "sidebar-right" : nothing}>
-              <duet-paragraph>${renderRichText(node)}</duet-paragraph>
+              <duet-paragraph variant="intro">${renderRichText(node)}</duet-paragraph>
             </duet-grid>
           `
         }
