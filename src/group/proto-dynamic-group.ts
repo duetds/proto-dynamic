@@ -56,7 +56,7 @@ export class ProtoDynamicGroup extends LitElement {
 
     return html`
       ${groupTitle && html`<duet-heading level=${headingVisualLevel}>${groupTitle}</duet-heading>`}
-      <nav aria-label=${accessibilityHeading}>
+      <nav aria-label=${accessibilityHeading || nothing}>
         <ul class="link-list">
           ${content?.map(item => {
             const { fields } = item
