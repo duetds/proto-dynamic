@@ -13,6 +13,8 @@ interface GroupItemFields extends HighlightFields {
   content?: ActionEntry[]
   linkVariation?: string
   linkIconColorVariation?: string
+  headingVisualLevel?: string
+  accessibilityHeading?: string
 }
 
 @customElement("proto-dynamic-group")
@@ -29,12 +31,7 @@ export class ProtoDynamicGroup extends LitElement {
       }
 
       ul.link-list li .link-item {
-          border-bottom: 1px solid var(--color-gray-light);
           border-radius: 0;
-      }
-
-      ul.link-list li:first-of-type .link-item {
-          border-top: 1px solid var(--color-gray-light);
       }
 
       ul.link-list li .link-item::part(duet-link) {
@@ -45,6 +42,8 @@ export class ProtoDynamicGroup extends LitElement {
 
   override render() {
     const fields = this.props?.fields
+    const headingVisualLevel = this.props?.fields?.headingVisualLevel
+    const accessibilityHeading = this.props?.fields?.accessibilityHeading
     const groupTitle = fields?.heading
     const content = fields?.content
     const linkVariation = fields?.linkVariation
@@ -56,31 +55,35 @@ export class ProtoDynamicGroup extends LitElement {
     }
 
     return html`
-      <duet-heading level="h3">${groupTitle}</duet-heading>
-      <ul class="link-list">
-        ${content?.map(item => {
-          const { fields } = item
-          const variation = getLinkVariation()
-          return html`
-        <li>
-          <duet-link
-            id=${fields.key}
-            class=${variation === "block" ? "link-item" : nothing}
-            url=${getLinkUrl(item, this.protoButtonHandlers)}
-            icon=${fields.icon ?? nothing}
-            icon-responsive
-            icon-color=${iconColor}
-            icon-background=${iconBackground}
-            external=${isUrlExternal(fields.url)}
-            variation=${variation}
-            @click=${() => handleLinkClick(item, this.protoButtonHandlers)}
-          >
-            ${fields.text ?? ""}
-          </duet-link>
-        </li>
-      `
-        })}
-      </ul>
+      ${groupTitle && html`<duet-heading level=${headingVisualLevel}>${groupTitle}</duet-heading>`}
+      <nav aria-label=${accessibilityHeading || nothing}>
+        <ul class="link-list">
+          ${content?.map(item => {
+            const { fields } = item
+            const variation = getLinkVariation()
+
+            return html`
+              <li>
+                <duet-link
+                  id=${fields.key}
+                  class=${variation === "block" ? "link-item" : nothing}
+                  url=${getLinkUrl(item, this.protoButtonHandlers)}
+                  icon=${fields.icon ?? nothing}
+                  icon-responsive
+                  icon-color=${iconColor}
+                  icon-background=${iconBackground}
+                  external=${isUrlExternal(fields.url)}
+                  variation=${variation}
+                  @click=${() => handleLinkClick(item, this.protoButtonHandlers)}
+                >
+                  ${fields.text ?? ""}
+                </duet-link>
+                <duet-divider margin="none"/>
+              </li>
+            `
+          })}
+        </ul>
+      </nav>
       <duet-spacer size="xx-large"></duet-spacer>
     `
   }
