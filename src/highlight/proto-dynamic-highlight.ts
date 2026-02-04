@@ -1,4 +1,4 @@
-import { css, html, LitElement, nothing } from "lit"
+import { html, LitElement, nothing } from "lit"
 import { customElement, property } from "lit/decorators.js"
 import type { ProtoButtonHandler } from "../hero/proto-dynamic-hero"
 import { getLinkUrl, handleLinkClick, isUrlExternal } from "../utils/helper-functions"
@@ -30,7 +30,7 @@ export interface ActionEntry {
   fields: {
     key: string
     text?: string
-    url?: string
+    url: string
     icon?: string
   }
 }
@@ -39,21 +39,6 @@ export interface ActionEntry {
 export class ProtoDynamicHighlight extends LitElement {
   @property({ type: Object }) props?: HighlightItem
   @property({ type: Array }) protoButtonHandlers?: ProtoButtonHandler[] // Overrides button behavior for prototype use
-
-  static override styles = css`
-      .actions {
-          display: flex;
-          flex-direction: column;
-          gap: var(--space-small);
-          margin-top: var(--space-small);
-
-          // Media query small
-          @media (min-width: 36em) {
-              flex-direction: row;
-              flex-wrap: wrap;
-          }
-      }
-  `
 
   override render() {
     const fields = this.props?.fields
@@ -66,16 +51,16 @@ export class ProtoDynamicHighlight extends LitElement {
     // Default variant of highlight component$
     return highlightVariation === "default"
       ? html`
-          <duet-grid
-            alignment="stretch"
-            breakpoint="medium"
-            mobile="left"
-            responsive
-          >
-            <duet-grid-item fill>
-              ${
-                iconName
-                  ? html`
+        <duet-grid
+          alignment="stretch"
+          breakpoint="medium"
+          mobile="left"
+          responsive
+        >
+          <duet-grid-item fill>
+            ${
+              iconName
+                ? html`
                   <duet-icon
                     shape="brand"
                     size="x-large"
@@ -84,40 +69,45 @@ export class ProtoDynamicHighlight extends LitElement {
                     name=${iconName}
                   ></duet-icon>
                 `
-                  : nothing
-              }
+                : nothing
+            }
 
-              <duet-heading level="h3">${highlightTitle}</duet-heading>
+            <duet-heading level="h3">${highlightTitle}</duet-heading>
 
-              ${description ? html`<duet-paragraph>${description}</duet-paragraph>` : nothing}
+            ${
+              description
+                ? html`
+                  <duet-paragraph>${description}</duet-paragraph>`
+                : nothing
+            }
 
-              <!-- Buttons -->
-              ${
-                actions?.length
-                  ? html`
-                    ${actions.map(action => {
-                      const { fields } = action
-                      return html`
-                        <duet-button
-                          fixed
-                          id=${fields.key}
-                          icon=${fields.icon ?? nothing}
-                          icon-right
-                          variation="plain"
-                          external=${isUrlExternal(fields.url)}
-                          url=${getLinkUrl(action, this.protoButtonHandlers)}
-                          @click=${() => handleLinkClick(action, this.protoButtonHandlers)}
-                        >
-                          ${fields.text ?? ""}
-                        </duet-button>
-                      `
-                    })}
+            <!-- Buttons -->
+            ${
+              actions?.length
+                ? html`
+                  ${actions.map(action => {
+                    const { fields } = action
+
+                    return html`
+                      <duet-button
+                        fixed
+                        id=${fields.key}
+                        icon=${fields.icon ?? nothing}
+                        icon-right
+                        variation="plain"
+                        external=${isUrlExternal(fields.url)}
+                        url=${getLinkUrl(action, this.protoButtonHandlers)}
+                        @click=${() => handleLinkClick(action, this.protoButtonHandlers)}
+                      >
+                        ${fields.text ?? ""}
+                      </duet-button>
+                    `
+                  })}
                 `
-                  : nothing
-              }
-
-            </duet-grid-item>
-          </duet-grid>
+                : nothing
+            }
+          </duet-grid-item>
+        </duet-grid>
       `
       : nothing
   }

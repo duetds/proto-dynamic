@@ -23,14 +23,13 @@ export interface ActionEntry {
     fields: {
         key: string;
         text?: string;
-        url?: string;
+        url: string;
         icon?: string;
     };
 }
 export declare class ProtoDynamicHighlight extends LitElement {
     props?: HighlightItem;
     protoButtonHandlers?: ProtoButtonHandler[];
-    static styles: import("lit").CSSResult;
     render(): typeof nothing | import("lit-html").TemplateResult<1>;
 }
 //# sourceMappingURL=proto-dynamic-highlight.d.ts.map

@@ -22,8 +22,6 @@ export class ProtoDynamicModal extends LitElement {
           node => html`
             <div>
               ${unsafeHTML(renderRichText(node))}
-              <duet-divider margin="none"></duet-divider>
-              <duet-spacer size="medium"></duet-spacer>
             </div>
           `
         )}

@@ -2,10 +2,13 @@ import { LitElement } from "lit";
 export interface RichTextNode {
     nodeType?: string;
     value?: string;
+    content?: RichTextNode[];
     data?: {
         uri?: string;
+        target?: {
+            fields?: Record<string, unknown>;
+        };
     };
-    content?: RichTextNode[];
 }
 export interface EntryFields {
     heading?: string;
@@ -30,17 +33,13 @@ export interface ButtonResource {
         key: string;
         text?: string;
         icon?: string;
-        url?: string;
+        url: string;
     };
 }
 export interface HeroFields {
-    heading?: {
-        value: string;
-    };
+    heading?: string;
     intro?: {
-        content: {
-            content: RichTextNode[];
-        }[];
+        content: RichTextNode[];
     };
     buttons?: ButtonResource[];
     icon?: string;
