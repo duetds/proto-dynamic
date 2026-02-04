@@ -6,10 +6,11 @@ import { getLinkUrl, isUrlExternal, renderRichText } from "../utils/helper-funct
 export interface RichTextNode {
   nodeType?: string
   value?: string
+  content?: RichTextNode[]
   data?: {
     uri?: string
+    target?: { fields?: Record<string, unknown> }
   }
-  content?: RichTextNode[]
 }
 
 export interface EntryFields {
@@ -19,10 +20,7 @@ export interface EntryFields {
 }
 
 export interface DynamicModalEvent extends CustomEvent {
-  detail: {
-    entryId: string
-    fields: EntryFields
-  }
+  detail: { entryId: string; fields: EntryFields }
 }
 
 export interface ProtoButtonHandler {
@@ -32,17 +30,12 @@ export interface ProtoButtonHandler {
 }
 
 export interface ButtonResource {
-  fields: {
-    key: string
-    text?: string
-    icon?: string
-    url?: string
-  }
+  fields: { key: string; text?: string; icon?: string; url: string }
 }
 
 export interface HeroFields {
-  heading?: { value: string }
-  intro?: { content: { content: RichTextNode[] }[] }
+  heading?: string
+  intro?: { content: RichTextNode[] }
   buttons?: ButtonResource[]
   icon?: string
 }
@@ -65,14 +58,12 @@ export class ProtoDynamicHero extends LitElement {
   override connectedCallback() {
     super.connectedCallback()
 
-    this.addEventListener("open-dynamic-modal", async (e: Event) => {
-      await this.openDynamicModal(e as DynamicModalEvent)
+    this.addEventListener("open-dynamic-modal", async (event: Event) => {
+      await this.openDynamicModal(event as DynamicModalEvent)
     })
 
     const parentGrid = this.closest("duet-grid")
-    const gridTemplate = parentGrid?.getAttribute("grid-template")
-
-    if (gridTemplate === "large") {
+    if (parentGrid?.getAttribute("grid-template") === "large") {
       this.isParentLarge = true
       this._mediaQuery = window.matchMedia("(min-width: 1220px)") // Duet media-query-xx-large
       this.isLargeScreen = this._mediaQuery.matches
@@ -96,13 +87,14 @@ export class ProtoDynamicHero extends LitElement {
     await this.updateComplete
 
     const dynamicModal = document.getElementById(this.currentModalEntryId) as HTMLDuetModalElement
+
     dynamicModal?.show()
   }
 
   override render() {
     const fields = this.props?.[0]?.fields
     const { heading, intro, buttons, icon } = fields ?? {}
-    const introNodes = intro?.content?.[0]?.content ?? []
+    const nodes = intro?.content ?? []
 
     return html`
       <duet-page-heading icon=${icon ?? nothing} layout="auto">
@@ -114,9 +106,10 @@ export class ProtoDynamicHero extends LitElement {
                 visual-level=${this.isParentLarge ? "h1" : "h2"}
                 slot="heading"
                 margin="none"
-              >${heading}
-              </duet-heading
-              >`
+              >
+                ${heading}
+              </duet-heading>
+            `
             : nothing
         }
       </duet-page-heading>
@@ -124,21 +117,22 @@ export class ProtoDynamicHero extends LitElement {
       <!-- Custom content -->
       <slot name="main"></slot>
 
-      <!-- RichText -->
-      ${introNodes.map(node => {
-        if (node.nodeType === "text") {
-          return html`
-            <duet-grid grid-template=${this.isParentLarge && this.isLargeScreen ? "sidebar-right" : nothing}>
-              <duet-paragraph variant="intro">${renderRichText(node)}</duet-paragraph>
-            </duet-grid>
-          `
+      <!-- Nodes -->
+      ${nodes.map(node => {
+        let renderedContent = ""
+
+        if (node.nodeType === "paragraph") {
+          renderedContent = node.content?.map(n => (n.nodeType === "text" ? n.value : renderRichText(n))).join("") ?? ""
+        } else if (node.nodeType === "embedded-entry-block" && node.data?.target?.fields) {
+          renderedContent = renderRichText(node)
         }
 
         return html`
-          <div>
-            ${unsafeHTML(renderRichText(node))}
-            <duet-spacer size="medium"></duet-spacer>
-          </div>
+          <duet-grid
+            grid-template=${this.isParentLarge && this.isLargeScreen ? "sidebar-right" : nothing}
+          >
+            <duet-paragraph variant="intro">${unsafeHTML(renderedContent)}</duet-paragraph>
+          </duet-grid>
         `
       })}
 
@@ -146,21 +140,25 @@ export class ProtoDynamicHero extends LitElement {
       ${
         buttons?.length
           ? html`
-            <duet-grid grid-template="button-grid" id="dynamichero_buttons">
+            <duet-grid
+              grid-template="button-grid"
+              id="dynamichero_buttons"
+            >
               ${buttons.map(
-                ({ fields }) => html`
+                b => html`
                   <duet-link
-                    id=${fields.key ?? nothing}
-                    icon=${fields.icon ?? nothing}
-                    url=${getLinkUrl({ fields }, this.protoButtonHandlers)}
+                    id=${b.fields.key ?? nothing}
+                    icon=${b.fields.icon ?? nothing}
+                    url=${getLinkUrl(b, this.protoButtonHandlers)}
                     variation="button"
-                    external=${isUrlExternal(fields.url)}
+                    external=${isUrlExternal(b.fields.url)}
                   >
-                    ${fields.text ?? ""}
+                    ${b.fields.text ?? ""}
                   </duet-link>
                 `
               )}
             </duet-grid>
+
             <duet-spacer size="x-large"></duet-spacer>
           `
           : nothing
