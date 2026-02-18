@@ -13,6 +13,7 @@ export class ProtoDynamicModal extends LitElement {
     return html`
       <duet-modal
         heading=${this.entryFields?.heading}
+        heading-level="h3"
         icon=${this.entryFields?.icon}
         id=${this.currentModalEntryId}
       >
@@ -21,7 +22,7 @@ export class ProtoDynamicModal extends LitElement {
         ${(this.entryFields?.body?.content ?? []).map(
           node => html`
             <div>
-              ${unsafeHTML(renderRichText(node))}
+              ${unsafeHTML(renderRichText(node).replace("<duet-heading", '<duet-heading level="h3"'))}
             </div>
           `
         )}

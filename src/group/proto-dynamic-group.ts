@@ -42,7 +42,7 @@ export class ProtoDynamicGroup extends LitElement {
 
   override render() {
     const fields = this.props?.fields
-    const headingVisualLevel = this.props?.fields?.headingVisualLevel || nothing
+    const headingVisualLevel = this.props?.fields?.headingVisualLevel || "h4"
     const accessibilityHeading = this.props?.fields?.accessibilityHeading
     const groupTitle = fields?.heading
     const content = fields?.content
@@ -55,7 +55,7 @@ export class ProtoDynamicGroup extends LitElement {
     }
 
     return html`
-      ${groupTitle && html`<duet-heading level="h4" visual-level=${headingVisualLevel}>${groupTitle}</duet-heading>`}
+      ${groupTitle && html`<duet-heading level="h2" visual-level=${headingVisualLevel}>${groupTitle}</duet-heading>`}
       <nav aria-label=${accessibilityHeading || nothing}>
         <ul class="link-list">
           <duet-divider margin="none"></duet-divider>
