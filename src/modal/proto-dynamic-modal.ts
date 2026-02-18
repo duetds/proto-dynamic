@@ -22,7 +22,7 @@ export class ProtoDynamicModal extends LitElement {
         ${(this.entryFields?.body?.content ?? []).map(
           node => html`
             <div>
-              ${unsafeHTML(renderRichText(node).replace("<duet-heading", '<duet-heading level="h3"'))}
+              ${unsafeHTML(renderRichText(node))}
             </div>
           `
         )}

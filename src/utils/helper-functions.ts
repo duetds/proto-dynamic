@@ -146,7 +146,7 @@ export const renderRichText = (input: RichTextNode | RichTextNode[], data?: Reco
 
     ${
       heading &&
-      `<duet-heading visual-level="h4">${heading}</duet-heading>
+      `<duet-heading level="h3" visual-level="h4">${heading}</duet-heading>
 <duet-spacer size="small"></duet-spacer>
 <duet-divider margin="small"></duet-divider>`
     }
