@@ -124,37 +124,8 @@ export const renderRichText = (input: RichTextNode | RichTextNode[], data?: Reco
         switch (typeId) {
           case "collapsibleGroup": {
             const heading = node.data.target.fields.heading || ""
-            const collapsibleElements = (node.data.target.fields.items || [])
-              .map(
-                (item: EmbeddedEntryData) => `<li>
-        <duet-collapsible heading="${item.fields.heading || ""}">
-          ${renderRichText(item.fields.body?.content ?? [])}
-        </duet-collapsible>
-        <duet-divider margin="small"></duet-divider>
-      </li>`
-              )
-              .join("") // join array into string
-
-            return `
-    <style>
-      ul.collapsible-list {
-        list-style: none;
-        margin: 0;
-        padding: 0;
-      }
-    </style>
-
-    ${
-      heading &&
-      `<duet-heading level="h3" visual-level="h4">${heading}</duet-heading>
-<duet-spacer size="small"></duet-spacer>
-<duet-divider margin="small"></duet-divider>`
-    }
-
-    <ul class="collapsible-list">
-      ${collapsibleElements}
-    </ul>
-  `
+            const collapsibleElements = (node.data.target.fields.items || []).map(renderCollapsibleElement).join("") // join array into string
+            return renderCollapsibleGroup(heading, collapsibleElements)
           }
           case "componentShowMore":
             return `<duet-show-more>${renderRichText(fields.body?.content ?? [])}</duet-show-more>`
@@ -201,4 +172,32 @@ const renderButtonResource = (embedded: EmbeddedEntryData) => {
     }))'>
       ${target.fields.text}
   </duet-button>`
+}
+
+const renderCollapsibleElement = (item: EmbeddedEntryData) => {
+  return `<li><duet-collapsible 
+    heading="${item.fields.heading || ""}"
+    >${renderRichText(item.fields.body?.content ?? [])}
+    </duet-collapsible>
+    <duet-divider margin="small"></duet-divider>
+  </li>`
+}
+
+const renderCollapsibleGroup = (heading: string, collapsibleElements: string) => {
+  return `<style>
+    ul.collapsible-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    }
+    </style>
+    ${
+      heading &&
+      `<duet-heading level="h3" visual-level="h4">${heading}</duet-heading>
+    <duet-spacer size="small"></duet-spacer>
+    <duet-divider margin="small"></duet-divider>`
+    }
+     <ul class="collapsible-list">
+     ${collapsibleElements}
+     </ul>`
 }
