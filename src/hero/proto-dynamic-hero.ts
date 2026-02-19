@@ -119,6 +119,7 @@ export class ProtoDynamicHero extends LitElement {
 
       <!-- Nodes -->
       <duet-grid
+        direction="vertical"
         grid-template=${this.isParentLarge && this.isLargeScreen ? "sidebar-right" : nothing}
       >
         ${unsafeHTML(attributeIntro(renderRichText(richText)))}
