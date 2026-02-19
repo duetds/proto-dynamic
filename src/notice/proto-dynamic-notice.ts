@@ -1,7 +1,8 @@
 import { html, LitElement } from "lit"
 import { customElement, property } from "lit/decorators.js"
+import { unsafeHTML } from "lit/directives/unsafe-html.js"
 import type { RichTextNode } from "../hero/proto-dynamic-hero"
-import { renderNodes } from "../utils/helper-functions"
+import { attributeMarginNone, renderRichText } from "../utils/helper-functions"
 
 export interface AlertNotice {
   fields: {
@@ -17,10 +18,11 @@ export class ProtoDynamicNotice extends LitElement {
   override render() {
     const fields = this.props?.fields
     const variation = fields?.variation
-    const messageNodes: RichTextNode[] = fields?.message?.content ?? []
+    const richTextContent = fields?.message ?? [] // message is always RichText
+
     return html`
       <duet-alert margin="none" variation=${variation}>
-        <duet-paragraph margin="none">${renderNodes(messageNodes)}</duet-paragraph>
+        ${unsafeHTML(attributeMarginNone(renderRichText(richTextContent)))}
       </duet-alert>
     `
   }

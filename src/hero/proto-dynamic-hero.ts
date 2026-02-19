@@ -1,7 +1,7 @@
 import { html, LitElement, nothing } from "lit"
 import { customElement, property } from "lit/decorators.js"
-import { renderNodes } from "../../lib/utils/helper-functions"
-import { getLinkUrl, isUrlExternal } from "../utils/helper-functions"
+import { unsafeHTML } from "lit/directives/unsafe-html.js"
+import { attributeIntro, getLinkUrl, isUrlExternal, renderRichText } from "../utils/helper-functions"
 
 export interface RichTextNode {
   nodeType?: string
@@ -94,7 +94,7 @@ export class ProtoDynamicHero extends LitElement {
   override render() {
     const fields = this.props?.[0]?.fields
     const { heading, intro, buttons, icon } = fields ?? {}
-    const nodes = intro?.content ?? []
+    const richText = intro?.content ?? [] // intro is always RichText
 
     return html`
       <duet-page-heading icon=${icon ?? nothing} layout="auto">
@@ -121,7 +121,7 @@ export class ProtoDynamicHero extends LitElement {
       <duet-grid
         grid-template=${this.isParentLarge && this.isLargeScreen ? "sidebar-right" : nothing}
       >
-        <duet-paragraph variation="intro">${renderNodes(nodes)}</duet-paragraph>
+        ${unsafeHTML(attributeIntro(renderRichText(richText)))}
       </duet-grid>
 
       <!-- Buttons -->
