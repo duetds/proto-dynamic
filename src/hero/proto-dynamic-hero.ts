@@ -1,7 +1,7 @@
 import { html, LitElement, nothing } from "lit"
 import { customElement, property } from "lit/decorators.js"
-import { unsafeHTML } from "lit/directives/unsafe-html.js"
-import { getLinkUrl, isUrlExternal, renderRichText } from "../utils/helper-functions"
+import { renderNodes } from "../../lib/utils/helper-functions"
+import { getLinkUrl, isUrlExternal } from "../utils/helper-functions"
 
 export interface RichTextNode {
   nodeType?: string
@@ -118,23 +118,11 @@ export class ProtoDynamicHero extends LitElement {
       <slot name="main"></slot>
 
       <!-- Nodes -->
-      ${nodes.map(node => {
-        let renderedContent = ""
-
-        if (node.nodeType === "paragraph") {
-          renderedContent = node.content?.map(n => (n.nodeType === "text" ? n.value : renderRichText(n))).join("") ?? ""
-        } else if (node.nodeType === "embedded-entry-block" && node.data?.target?.fields) {
-          renderedContent = renderRichText(node)
-        }
-
-        return html`
-          <duet-grid
-            grid-template=${this.isParentLarge && this.isLargeScreen ? "sidebar-right" : nothing}
-          >
-            <duet-paragraph variation="intro">${unsafeHTML(renderedContent)}</duet-paragraph>
-          </duet-grid>
-        `
-      })}
+      <duet-grid
+        grid-template=${this.isParentLarge && this.isLargeScreen ? "sidebar-right" : nothing}
+      >
+        <duet-paragraph variation="intro">${renderNodes(nodes)}</duet-paragraph>
+      </duet-grid>
 
       <!-- Buttons -->
       ${

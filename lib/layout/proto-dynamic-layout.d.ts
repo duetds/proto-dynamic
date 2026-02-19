@@ -13,7 +13,7 @@ interface DynamicLayoutProps {
 export declare class ProtoDynamicLayout extends LitElement {
     props?: DynamicLayoutProps;
     protoButtonHandlers?: ProtoButtonHandler[];
-    render(): import("lit-html").TemplateResult<1> | typeof nothing;
+    render(): typeof nothing | import("lit-html").TemplateResult<1>;
 }
 export {};
 //# sourceMappingURL=proto-dynamic-layout.d.ts.map

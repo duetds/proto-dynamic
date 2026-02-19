@@ -1,6 +1,7 @@
 import { documentToHtmlString, type NodeRenderer } from "@contentful/rich-text-html-renderer"
 import { BLOCKS, type Document, INLINES, type Inline } from "@contentful/rich-text-types"
 import { nothing } from "lit"
+import { unsafeHTML } from "lit/directives/unsafe-html.js"
 import type { GroupItem } from "../group/proto-dynamic-group"
 import type { ProtoButtonHandler, RichTextNode } from "../hero/proto-dynamic-hero"
 import type { HighlightItem } from "../highlight/proto-dynamic-highlight"
@@ -90,6 +91,23 @@ const getEmbeddedEntryData = (node: RichTextNode | Inline): EmbeddedEntryData | 
     entry: target.fields.entry,
     fields: target.fields,
   }
+}
+
+export const renderNodes = (nodes: RichTextNode[]): ReturnType<typeof unsafeHTML> => {
+  const htmlString = nodes
+    .map(node => {
+      if (node.nodeType === "paragraph") {
+        // concatenate the text/child nodes
+        return node.content?.map(n => (n.nodeType === "text" ? n.value : renderRichText(n))).join("") ?? ""
+      }
+      if (node.nodeType === "embedded-entry-block" && node.data?.target?.fields) {
+        return renderRichText(node)
+      }
+      return ""
+    })
+    .join("") // join all nodes into a single string
+
+  return unsafeHTML(htmlString) // return wrapped in unsafeHTML
 }
 
 export const renderRichText = (input: RichTextNode | RichTextNode[], data?: Record<string, unknown>): string => {
