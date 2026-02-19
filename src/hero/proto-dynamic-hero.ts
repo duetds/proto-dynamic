@@ -131,7 +131,7 @@ export class ProtoDynamicHero extends LitElement {
           <duet-grid
             grid-template=${this.isParentLarge && this.isLargeScreen ? "sidebar-right" : nothing}
           >
-            <duet-paragraph variant="intro">${unsafeHTML(renderedContent)}</duet-paragraph>
+            <duet-paragraph variation="intro">${unsafeHTML(renderedContent)}</duet-paragraph>
           </duet-grid>
         `
       })}
