@@ -122,7 +122,7 @@ export class ProtoDynamicHero extends LitElement {
         direction="vertical"
         grid-template=${this.isParentLarge && this.isLargeScreen ? "sidebar-right" : nothing}
       >
-        ${unsafeHTML(formatRichText(renderRichText(richText), { margin: "none", stylePreset: "intro" }))}
+        ${unsafeHTML(formatRichText(renderRichText(richText), { stylePreset: "intro" }))}
       </duet-grid>
 
       <!-- Buttons -->
