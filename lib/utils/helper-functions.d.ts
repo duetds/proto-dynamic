@@ -8,7 +8,14 @@ export declare function getProtoButtonHandler(item: ButtonLinkedItem, protoButto
 export declare function getLinkUrl(item: ButtonLinkedItem, protoButtonHandlers?: ProtoButtonHandler[]): string | typeof nothing;
 export declare function handleLinkClick(item: ButtonLinkedItem, protoButtonHandlers?: ProtoButtonHandler[]): void;
 export declare const renderRichText: (input: RichTextNode | RichTextNode[], data?: Record<string, unknown>) => string;
-export declare function attributeIntro(element: string): string;
-export declare function attributeMarginNone(element: string): string;
+/**
+ * @param html
+ * @param options object, supported keys: "margin" with value "none", "stylePreset" with value one of "small", "intro", "caption", "smallCaption"
+ * @returns HTML text
+ */
+export declare function formatRichText(html: string, options: {
+    margin?: string;
+    stylePreset?: string;
+}): string;
 export {};
 //# sourceMappingURL=helper-functions.d.ts.map

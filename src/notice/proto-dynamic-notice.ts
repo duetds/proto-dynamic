@@ -1,8 +1,7 @@
 import { html, LitElement } from "lit"
 import { customElement, property } from "lit/decorators.js"
-import { unsafeHTML } from "lit/directives/unsafe-html.js"
 import type { RichTextNode } from "../hero/proto-dynamic-hero"
-import { attributeMarginNone, renderRichText } from "../utils/helper-functions"
+import { formatRichText, renderRichText } from "../utils/helper-functions"
 
 export interface AlertNotice {
   fields: {
@@ -22,7 +21,7 @@ export class ProtoDynamicNotice extends LitElement {
 
     return html`
       <duet-alert margin="none" variation=${variation}>
-        ${unsafeHTML(attributeMarginNone(renderRichText(richTextContent)))}
+        ${formatRichText(renderRichText(richTextContent), { margin: "none" })}
       </duet-alert>
     `
   }

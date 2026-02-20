@@ -1,7 +1,6 @@
 import { html, LitElement, nothing } from "lit"
 import { customElement, property } from "lit/decorators.js"
-import { unsafeHTML } from "lit/directives/unsafe-html.js"
-import { attributeIntro, getLinkUrl, isUrlExternal, renderRichText } from "../utils/helper-functions"
+import { formatRichText, getLinkUrl, isUrlExternal, renderRichText } from "../utils/helper-functions"
 
 export interface RichTextNode {
   nodeType?: string
@@ -122,7 +121,7 @@ export class ProtoDynamicHero extends LitElement {
         direction="vertical"
         grid-template=${this.isParentLarge && this.isLargeScreen ? "sidebar-right" : nothing}
       >
-        ${unsafeHTML(attributeIntro(renderRichText(richText)))}
+        ${formatRichText(renderRichText(richText), { margin: "none", stylePreset: "intro" })}
       </duet-grid>
 
       <!-- Buttons -->
