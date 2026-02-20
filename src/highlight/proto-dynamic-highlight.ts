@@ -48,7 +48,7 @@ export class ProtoDynamicHighlight extends LitElement {
     const actions = fields?.actions
     const highlightVariation = fields?.style
 
-    // Default variant of highlight component$
+    // Default variation of highlight component$
     return highlightVariation === "default"
       ? html`
         <duet-grid

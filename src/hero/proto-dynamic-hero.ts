@@ -1,7 +1,6 @@
 import { html, LitElement, nothing } from "lit"
 import { customElement, property } from "lit/decorators.js"
-import { unsafeHTML } from "lit/directives/unsafe-html.js"
-import { getLinkUrl, isUrlExternal, renderRichText } from "../utils/helper-functions"
+import { formatRichText, getLinkUrl, isUrlExternal, renderRichText } from "../utils/helper-functions"
 
 export interface RichTextNode {
   nodeType?: string
@@ -94,7 +93,7 @@ export class ProtoDynamicHero extends LitElement {
   override render() {
     const fields = this.props?.[0]?.fields
     const { heading, intro, buttons, icon } = fields ?? {}
-    const nodes = intro?.content ?? []
+    const richText = intro?.content ?? [] // intro is always RichText
 
     return html`
       <duet-page-heading icon=${icon ?? nothing} layout="auto">
@@ -118,23 +117,12 @@ export class ProtoDynamicHero extends LitElement {
       <slot name="main"></slot>
 
       <!-- Nodes -->
-      ${nodes.map(node => {
-        let renderedContent = ""
-
-        if (node.nodeType === "paragraph") {
-          renderedContent = node.content?.map(n => (n.nodeType === "text" ? n.value : renderRichText(n))).join("") ?? ""
-        } else if (node.nodeType === "embedded-entry-block" && node.data?.target?.fields) {
-          renderedContent = renderRichText(node)
-        }
-
-        return html`
-          <duet-grid
-            grid-template=${this.isParentLarge && this.isLargeScreen ? "sidebar-right" : nothing}
-          >
-            <duet-paragraph variant="intro">${unsafeHTML(renderedContent)}</duet-paragraph>
-          </duet-grid>
-        `
-      })}
+      <duet-grid
+        direction="vertical"
+        grid-template=${this.isParentLarge && this.isLargeScreen ? "sidebar-right" : nothing}
+      >
+        ${formatRichText(renderRichText(richText), { margin: "none", stylePreset: "intro" })}
+      </duet-grid>
 
       <!-- Buttons -->
       ${

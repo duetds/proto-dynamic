@@ -41,7 +41,6 @@ interface EmbeddedEntryData {
 /* -------------------------------------------------------
  * Proto button handlers & URL helpers
  * ----------------------------------------------------- */
-
 export function isUrlExternal(url: string): boolean {
   return !!url?.includes("https://")
 }
@@ -124,37 +123,8 @@ export const renderRichText = (input: RichTextNode | RichTextNode[], data?: Reco
         switch (typeId) {
           case "collapsibleGroup": {
             const heading = node.data.target.fields.heading || ""
-            const collapsibleElements = (node.data.target.fields.items || [])
-              .map(
-                (item: EmbeddedEntryData) => `<li>
-        <duet-collapsible heading="${item.fields.heading || ""}">
-          ${renderRichText(item.fields.body?.content ?? [])}
-        </duet-collapsible>
-        <duet-divider margin="small"></duet-divider>
-      </li>`
-              )
-              .join("") // join array into string
-
-            return `
-    <style>
-      ul.collapsible-list {
-        list-style: none;
-        margin: 0;
-        padding: 0;
-      }
-    </style>
-
-    ${
-      heading &&
-      `<duet-heading visual-level="h4">${heading}</duet-heading>
-<duet-spacer size="small"></duet-spacer>
-<duet-divider margin="small"></duet-divider>`
-    }
-
-    <ul class="collapsible-list">
-      ${collapsibleElements}
-    </ul>
-  `
+            const collapsibleElements = (node.data.target.fields.items || []).map(renderCollapsibleElement).join("") // join array into string
+            return renderCollapsibleGroup(heading, collapsibleElements)
           }
           case "componentShowMore":
             return `<duet-show-more>${renderRichText(fields.body?.content ?? [])}</duet-show-more>`
@@ -201,4 +171,70 @@ const renderButtonResource = (embedded: EmbeddedEntryData) => {
     }))'>
       ${target.fields.text}
   </duet-button>`
+}
+
+const renderCollapsibleElement = (item: EmbeddedEntryData) => {
+  return `<li><duet-collapsible 
+    heading="${item.fields.heading || ""}"
+    >${renderRichText(item.fields.body?.content ?? [])}
+    </duet-collapsible>
+    <duet-divider margin="small"></duet-divider>
+  </li>`
+}
+
+const renderCollapsibleGroup = (heading: string, collapsibleElements: string) => {
+  return `<style>
+    ul.collapsible-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    }
+    </style>
+    ${
+      heading &&
+      `<duet-heading level="h3" visual-level="h4">${heading}</duet-heading>
+    <duet-spacer size="small"></duet-spacer>
+    <duet-divider margin="small"></duet-divider>`
+    }
+     <ul class="collapsible-list">
+     ${collapsibleElements}
+     </ul>`
+}
+
+/* -------------------------------------------------------
+ * Rich Text formatter
+ * ----------------------------------------------------- */
+/**
+ * @param html
+ * @param options object, supported keys: "margin" with value "none", "stylePreset" with value one of "small", "intro", "caption", "smallCaption"
+ * @returns HTML text
+ */
+export function formatRichText(html: string, options: { margin?: string; stylePreset?: string }) {
+  if (!options) {
+    return html
+  }
+  const container = document.createElement("div")
+  container.innerHTML = html
+  if (options.margin === "none") {
+    container?.querySelector("duet-paragraph:last-of-type")?.setAttribute("margin", "none")
+  }
+  if (options.stylePreset) {
+    if (options.stylePreset.startsWith("caption")) {
+      container.querySelectorAll("duet-paragraph").forEach(el => {
+        const caption = document.createElement("duet-caption")
+        if (options.stylePreset === "captionSmall") {
+          caption.setAttribute("size", "small")
+        }
+        caption.innerHTML = el.innerHTML
+        el.replaceWith(caption)
+      })
+    }
+    if (options.stylePreset === "small") {
+      container.querySelectorAll("duet-paragraph").forEach(el => el.setAttribute("size", "small"))
+    }
+    if (options.stylePreset === "intro") {
+      container.querySelectorAll("duet-paragraph").forEach(el => el.setAttribute("variation", "intro"))
+    }
+  }
+  return container.innerHTML
 }
