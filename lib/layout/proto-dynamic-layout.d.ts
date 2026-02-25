@@ -6,7 +6,7 @@ interface DynamicLayoutItem {
 interface DynamicComponentContainer {
     __dynamicComponent: unknown[];
 }
-interface DynamicLayoutProps {
+export interface DynamicLayoutProps {
     __dynamicLayout: DynamicLayoutItem[];
     [key: string]: DynamicComponentContainer | DynamicLayoutItem[] | undefined;
 }

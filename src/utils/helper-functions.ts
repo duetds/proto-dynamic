@@ -1,6 +1,6 @@
 import { documentToHtmlString, type NodeRenderer } from "@contentful/rich-text-html-renderer"
 import { BLOCKS, type Document, INLINES, type Inline } from "@contentful/rich-text-types"
-import { nothing } from "lit"
+import { html, nothing } from "lit"
 import type { GroupItem } from "../group/proto-dynamic-group"
 import type { ProtoButtonHandler, RichTextNode } from "../hero/proto-dynamic-hero"
 import type { HighlightItem } from "../highlight/proto-dynamic-highlight"
@@ -9,6 +9,15 @@ import type { HighlightItem } from "../highlight/proto-dynamic-highlight"
  * Embedded entry types
  * ----------------------------------------------------- */
 type ButtonLinkedItem = GroupItem | HighlightItem
+
+interface ComponentProps {
+  embedded?: EmbeddedEntryData
+  fields?: EmbeddedTargetFields
+  target?: EmbeddedTarget
+  protoButtonHandlers?: ProtoButtonHandler[]
+  key?: string
+  data?: Record<string, unknown>
+}
 
 interface EmbeddedEntry {
   sys: { id: string; contentType: { sys: { id: string } } }
@@ -20,9 +29,10 @@ interface EmbeddedTargetFields {
   entry?: EmbeddedEntry
   icon?: string
   text?: string
-  richTextAppearance: string
+  richTextAppearance?: string
   heading?: string
   body?: { content: RichTextNode[] }
+  items?: EmbeddedEntryData[]
 }
 
 interface EmbeddedTarget {
@@ -32,8 +42,8 @@ interface EmbeddedTarget {
 
 interface EmbeddedEntryData {
   target: EmbeddedTarget
-  typeId?: string
   key?: string
+  typeId?: string
   entry?: EmbeddedEntry
   fields: EmbeddedTargetFields
 }
@@ -114,39 +124,68 @@ export const renderRichText = (input: RichTextNode | RichTextNode[], data?: Reco
       [BLOCKS.HEADING_5]: (node, next) => `<duet-heading level="h5">${next(node.content)}</duet-heading>`,
       [BLOCKS.HEADING_6]: (node, next) => `<duet-heading level="h6">${next(node.content)}</duet-heading>`,
       [BLOCKS.EMBEDDED_ENTRY]: node => {
+        //TODO: use the contentful test page in YRD to debug. Add all switch cases in 1 helper anc call it everywhere, inline, entry blocks and even dynamic module.
         const embedded = getEmbeddedEntryData(node)
         if (!embedded) return ""
 
-        const { typeId, fields } = embedded
+        const { target, fields } = embedded
+        const componentData = { embedded, target, fields }
+
         if (!fields) return ""
 
-        switch (typeId) {
-          case "collapsibleGroup": {
-            const heading = node.data.target.fields.heading || ""
-            const collapsibleElements = (node.data.target.fields.items || []).map(renderCollapsibleElement).join("") // join array into string
-            return renderCollapsibleGroup(heading, collapsibleElements)
-          }
-          case "componentShowMore":
-            return `<duet-show-more>${renderRichText(fields.body?.content ?? [])}</duet-show-more>`
-          case "buttonResource":
-            return renderButtonResource(embedded)
-          default:
-            return fields.body ? renderRichText(fields.body.content ?? []) : ""
+        const inlineRT = renderComponent(componentData)
+
+        if (inlineRT === "default") {
+          return fields.body ? renderRichText(fields.body.content ?? []) : ""
         }
+
+        return inlineRT
+        //
+        // switch (typeId) {
+        //   case "collapsibleGroup": {
+        //     const heading = node.data.target.fields.heading || ""
+        //     const collapsibleElements = (node.data.target.fields.items || []).map(renderCollapsibleElement).join("") // join array into string
+        //     return renderCollapsibleGroup(heading, collapsibleElements)
+        //   }
+        //   case "componentShowMore":
+        //     return `<duet-show-more>${renderRichText(fields.body?.content ?? [])}</duet-show-more>`
+        //   case "buttonResource":
+        //     return renderButtonResource(embedded)
+        //   case "alert":
+        //     console.log('WE HAVE AN ALERT')
+        //     return `<proto-dynamic-notice
+        //     props='${JSON.stringify(target)}'>
+        //   </proto-dynamic-notice>`
+        //   default:
+        //     "default"
+        // }
       },
       [INLINES.EMBEDDED_ENTRY]: node => {
         const embedded = getEmbeddedEntryData(node)
         if (!embedded) return ""
 
-        const { typeId, key } = embedded
-        switch (typeId) {
-          case "componentRichTextVariable":
-            return key ? String(data?.[key] ?? `{{${key}}}`) : ""
-          case "buttonResource":
-            return renderButtonResource(embedded)
-          default:
-            return `${typeId}: {{${key}}}`
+        const { typeId, key, target, fields } = embedded
+        const componentData = { embedded, target, fields, key, data }
+
+        if (!fields) return ""
+
+        const inlineRT = renderComponent(componentData)
+
+        if (inlineRT === "default") {
+          return `${typeId}: {{${key}}}`
         }
+
+        return inlineRT
+
+        // const { typeId, key } = embedded
+        // switch (typeId) {
+        //   case "componentRichTextVariable":
+        //     return key ? String(data?.[key] ?? `{{${key}}}`) : ""
+        //   case "buttonResource":
+        //     return renderButtonResource(embedded)
+        //   default:
+        //     return `${typeId}: {{${key}}}`
+        // }
       },
       [BLOCKS.HR]: () => "<duet-divider></duet-divider>",
     } as Record<string, NodeRenderer>,
@@ -162,7 +201,7 @@ const renderButtonResource = (embedded: EmbeddedEntryData) => {
 
   return `<duet-button
     icon=${target.fields.icon}
-    variation=${transformVariation(target.fields.richTextAppearance)}
+    variation=${transformVariation(target?.fields?.richTextAppearance ?? "default")}
     margin="none"
     onclick='this.dispatchEvent(new CustomEvent("open-dynamic-modal", {
       detail: { entryId: "${entry.sys.id}", fields: ${JSON.stringify(entry.fields)} },
@@ -237,4 +276,48 @@ export function formatRichText(html: string, options: { margin?: string; stylePr
     }
   }
   return container.innerHTML
+}
+
+/* -------------------------------------------------------
+ * Component renderer
+ * ----------------------------------------------------- */
+export function renderComponent(props: ComponentProps) {
+  const { embedded, target, fields, protoButtonHandlers, key, data } = props
+  const typeId = target?.sys?.contentType?.sys?.id
+
+  switch (typeId) {
+    case "componentRichTextVariable":
+      return key ? String(data?.[key] ?? `{{${key}}}`) : ""
+    case "highlight":
+      return html`
+        <proto-dynamic-highlight
+          .protoButtonHandlers=${protoButtonHandlers}
+          props='${JSON.stringify(target)}'>
+        </proto-dynamic-highlight>`
+    case "dynamicGroup":
+      return html`
+        <proto-dynamic-group
+          .protoButtonHandlers=${protoButtonHandlers}
+          props='${JSON.stringify(target)}'>
+        </proto-dynamic-group>`
+
+    case "collapsibleGroup": {
+      const heading = target?.fields?.heading || ""
+      const collapsibleElements = (target?.fields?.items || []).map(renderCollapsibleElement).join("")
+      return renderCollapsibleGroup(heading, collapsibleElements)
+    }
+
+    case "componentShowMore":
+      return `<duet-show-more>${renderRichText(fields?.body?.content ?? [])}</duet-show-more>`
+
+    case "buttonResource":
+      if (!embedded) return
+      return renderButtonResource(embedded)
+
+    case "alert":
+      return `<proto-dynamic-notice props='${JSON.stringify(target)}'></proto-dynamic-notice>`
+
+    default:
+      return "default"
+  }
 }

@@ -7,12 +7,14 @@ interface HighlightFields {
     key: string;
     content?: ActionEntry[];
 }
-interface ActionEntry {
+export interface ActionEntry {
     fields: {
         key: string;
         text?: string;
         url?: string;
         icon?: string;
+        heading?: string | undefined;
+        items?: [] | undefined;
     };
     sys: {
         contentType: {

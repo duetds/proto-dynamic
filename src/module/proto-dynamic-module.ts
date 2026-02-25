@@ -1,6 +1,7 @@
 import { css, html, LitElement, nothing } from "lit"
 import { customElement, property } from "lit/decorators.js"
 import type { ProtoButtonHandler } from "../hero/proto-dynamic-hero"
+import { renderComponent } from "../utils/helper-functions"
 
 interface ModuleProps {
   fields: HighlightFields
@@ -11,12 +12,14 @@ interface HighlightFields {
   content?: ActionEntry[]
 }
 
-interface ActionEntry {
+export interface ActionEntry {
   fields: {
     key: string
     text?: string
     url?: string
     icon?: string
+    heading?: string | undefined
+    items?: [] | undefined
   }
   sys: {
     contentType: {
@@ -40,31 +43,23 @@ export class ProtoDynamicModule extends LitElement {
     const fields = this.props?.[0]?.fields
     const content = fields?.content
 
+    //TODO: grid template should be used only on page level
+    // delete this and check what was the requirement with dynamic components and how we want to present them
     function getGridTemplate() {
       if (!content?.length || content.length === 1) return nothing
       return content.length === 2 ? "two-columns" : "three-columns"
     }
 
     function getComponent(item: ActionEntry, protoButtonHandlers?: ProtoButtonHandler[]) {
-      const { id } = item.sys.contentType.sys
-      switch (id) {
-        case "highlight":
-          return html`<proto-dynamic-highlight
-            .protoButtonHandlers=${protoButtonHandlers}
-            .props=${item}>
-          </proto-dynamic-highlight>`
-        case "dynamicGroup":
-          return html`<proto-dynamic-group
-            .protoButtonHandlers=${protoButtonHandlers}
-            .props=${item}>
-          </proto-dynamic-group>`
-        case "alert":
-          return html`<proto-dynamic-notice
-            .props=${item}>
-          </proto-dynamic-notice>`
-        default:
-          return nothing
+      console.log("getComponent ITEM:", item)
+      const componentData = { target: item, protoButtonHandlers }
+
+      const inlineRT = renderComponent(componentData)
+      if (inlineRT === "default") {
+        return nothing
       }
+
+      return inlineRT
     }
 
     return content?.length

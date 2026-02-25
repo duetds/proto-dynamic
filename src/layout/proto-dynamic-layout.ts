@@ -10,7 +10,7 @@ interface DynamicComponentContainer {
   __dynamicComponent: unknown[]
 }
 
-interface DynamicLayoutProps {
+export interface DynamicLayoutProps {
   __dynamicLayout: DynamicLayoutItem[]
   [key: string]: DynamicComponentContainer | DynamicLayoutItem[] | undefined
 }
@@ -24,6 +24,7 @@ export class ProtoDynamicLayout extends LitElement {
     const dynamicComponents = this.props?.__dynamicLayout
     if (!dynamicComponents) return nothing
 
+    console.log("LAYOUT WORKS2")
     return html`
       ${dynamicComponents.map(component => {
         const data = (this.props?.[component.key] as DynamicComponentContainer)?.__dynamicComponent

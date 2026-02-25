@@ -5,7 +5,9 @@ import { ProtoDynamicLayout } from "./layout/proto-dynamic-layout"
 import { ProtoDynamicModal } from "./modal/proto-dynamic-modal"
 import { ProtoDynamicModule } from "./module/proto-dynamic-module"
 import { ProtoDynamicNotice } from "./notice/proto-dynamic-notice"
+import { ProtoDynamicRichText } from "./rich-text/proto-dynamic-rich-text"
 
+console.log("Testing")
 export {
   ProtoDynamicHero,
   ProtoDynamicHighlight,
@@ -14,4 +16,5 @@ export {
   ProtoDynamicLayout,
   ProtoDynamicModal,
   ProtoDynamicNotice,
+  ProtoDynamicRichText,
 }
