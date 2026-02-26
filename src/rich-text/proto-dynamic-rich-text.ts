@@ -12,7 +12,7 @@ export class ProtoDynamicRichText extends LitElement {
   override render() {
     const fields = this.props
     if (!fields) return
-
+    // TODO: pass RT props from inside the target project (margin, stylePreset, etc)
     return html`
       ${unsafeHTML(formatRichText(renderRichText(fields), { margin: "none" }))}
     `

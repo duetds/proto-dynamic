@@ -1,4 +1,4 @@
-import { css, html, LitElement, nothing } from "lit"
+import { html, LitElement, nothing } from "lit"
 import { customElement, property } from "lit/decorators.js"
 import { unsafeHTML } from "lit/directives/unsafe-html.js"
 import type { ProtoButtonHandler } from "../hero/proto-dynamic-hero"
@@ -34,12 +34,6 @@ export class ProtoDynamicModule extends LitElement {
   @property({ type: Array }) props?: ModuleProps[]
   @property({ type: Array }) protoButtonHandlers?: ProtoButtonHandler[] // Overrides button behavior for prototype use
 
-  static override styles = css`
-   .no-padding {
-       padding: 0;
-   }
-  `
-
   override render() {
     const fields = this.props?.[0]?.fields
     const content = fields?.content
@@ -59,13 +53,13 @@ export class ProtoDynamicModule extends LitElement {
 
     return content?.length
       ? html`
-        <duet-grid class="no-padding" grid-template=${getGridTemplate()}>
+        <duet-grid grid-template=${getGridTemplate()}>
           ${content.map(
             item => html`
-            <duet-grid-item fill>
-              ${getComponent(item, this.protoButtonHandlers)}
-            </duet-grid-item>
-          `
+              <duet-grid-item fill>
+                ${getComponent(item, this.protoButtonHandlers)}
+              </duet-grid-item>
+            `
           )}
         </duet-grid>
       `
