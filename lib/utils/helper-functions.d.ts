@@ -1,3 +1,4 @@
+import { type Inline } from "@contentful/rich-text-types";
 import { nothing } from "lit";
 import type { GroupItem } from "../group/proto-dynamic-group";
 import type { ProtoButtonHandler, RichTextNode } from "../hero/proto-dynamic-hero";
@@ -34,7 +35,7 @@ interface EmbeddedTargetFields {
     };
     items?: EmbeddedEntryData[];
 }
-interface EmbeddedTarget {
+export interface EmbeddedTarget {
     sys: {
         contentType?: {
             sys?: {
@@ -55,16 +56,17 @@ export declare function isUrlExternal(url: string): boolean;
 export declare function getProtoButtonHandler(item: ButtonLinkedItem, protoButtonHandlers?: ProtoButtonHandler[]): ProtoButtonHandler | undefined;
 export declare function getLinkUrl(item: ButtonLinkedItem, protoButtonHandlers?: ProtoButtonHandler[]): string | typeof nothing;
 export declare function handleLinkClick(item: ButtonLinkedItem, protoButtonHandlers?: ProtoButtonHandler[]): void;
+export declare const getEmbeddedEntryData: (node: RichTextNode | Inline) => EmbeddedEntryData | null;
 export declare const renderRichText: (input: RichTextNode | RichTextNode[], data?: Record<string, unknown>) => string;
 /**
  * @param html
  * @param options object, supported keys: "margin" with value "none", "stylePreset" with value one of "small", "intro", "caption", "smallCaption"
  * @returns HTML text
  */
-export declare function formatRichText(html: string, options: {
+export declare function formatRichText(html: string, options?: {
     margin?: string;
     stylePreset?: string;
 }): string;
-export declare function renderComponent(props: ComponentProps): string | import("lit-html").TemplateResult<1> | undefined;
+export declare function renderComponent(props: ComponentProps): string | import("lit-html").TemplateResult<1>;
 export {};
 //# sourceMappingURL=helper-functions.d.ts.map

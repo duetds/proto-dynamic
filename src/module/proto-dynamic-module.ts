@@ -51,15 +51,8 @@ export class ProtoDynamicModule extends LitElement {
     }
 
     function getComponent(item: ActionEntry, protoButtonHandlers?: ProtoButtonHandler[]) {
-      console.log("getComponent ITEM:", item)
-      const componentData = { target: item, protoButtonHandlers }
-
-      const inlineRT = renderComponent(componentData)
-      if (inlineRT === "default") {
-        return nothing
-      }
-
-      return inlineRT
+      const result = renderComponent({ target: item, protoButtonHandlers })
+      return result === "default" ? nothing : result
     }
 
     return content?.length
