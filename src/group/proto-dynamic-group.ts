@@ -1,7 +1,8 @@
 import { css, html, LitElement, nothing } from "lit"
 import { customElement, property } from "lit/decorators.js"
 import type { ProtoButtonHandler } from "../hero/proto-dynamic-hero"
-import type { ActionEntry, HighlightFields } from "../highlight/proto-dynamic-highlight"
+import type { HighlightFields } from "../highlight/proto-dynamic-highlight"
+import type { ActionEntry } from "../module/proto-dynamic-module"
 import { getLinkUrl, handleLinkClick, isUrlExternal } from "../utils/helper-functions"
 
 export interface GroupItem {
