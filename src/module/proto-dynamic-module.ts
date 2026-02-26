@@ -40,24 +40,24 @@ export class ProtoDynamicModule extends LitElement {
    }
       .module-grid {
           display: grid;
-          grid-template-columns: repeat(3, 1fr);
           gap: var(--space-medium);
       }       
   `
 
   override render() {
     const fields = this.props?.[0]?.fields
-    const content = fields?.content
+    const content = fields?.content || []
+    const columns = Math.min(content?.length, 3) || 1
+    const gridStyle = `grid-template-columns: repeat(${columns}, 1fr);`
 
     function getComponent(item: ActionEntry, protoButtonHandlers?: ProtoButtonHandler[]) {
       const result = renderComponent({ target: item, protoButtonHandlers })
-
       return result === "default" ? nothing : unsafeHTML(result)
     }
 
     return content?.length
       ? html`
-        <div class="no-padding module-grid">
+        <div class="no-padding module-grid" style=${gridStyle}>
           ${content.map(
             item => html`
             <div>
