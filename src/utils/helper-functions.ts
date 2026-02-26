@@ -1,6 +1,6 @@
 import { documentToHtmlString, type NodeRenderer } from "@contentful/rich-text-html-renderer"
 import { BLOCKS, type Document, INLINES, type Inline } from "@contentful/rich-text-types"
-import { html, nothing } from "lit"
+import { nothing } from "lit"
 import type { GroupItem } from "../group/proto-dynamic-group"
 import type { ProtoButtonHandler, RichTextNode } from "../hero/proto-dynamic-hero"
 import type { HighlightItem } from "../highlight/proto-dynamic-highlight"
@@ -88,7 +88,7 @@ const transformVariation = (resourceType?: string) => {
   }
 }
 
-export const getEmbeddedEntryData = (node: RichTextNode | Inline): EmbeddedEntryData | null => {
+const getEmbeddedEntryData = (node: RichTextNode | Inline): EmbeddedEntryData | null => {
   const target = node.data?.target as EmbeddedTarget | undefined
   if (!target?.fields) return null
 
@@ -180,16 +180,20 @@ const renderCollapsibleElement = (item: EmbeddedEntryData) => `<li>
   <duet-divider margin="small"></duet-divider>
 </li>`
 
-const renderCollapsibleGroup = (heading: string, collapsibleElements: string) => `<style>
-ul.collapsible-list { list-style: none; margin: 0; padding: 0; }
-</style>
+const renderCollapsibleGroup = (heading: string, collapsibleElements: string) => `
+  <style>
+    ul.collapsible-list { 
+     list-style: none; 
+     margin: 0; 
+     padding: 0; }
+  </style>
  ${
    heading &&
    `<duet-heading level="h3" visual-level="h4">${heading}</duet-heading>
-    <duet-spacer size="small"></duet-spacer>
-    <duet-divider margin="small"></duet-divider>`
+      <duet-spacer size="small"></duet-spacer>
+      <duet-divider margin="small"></duet-divider>`
  }
-<ul class="collapsible-list">${collapsibleElements}</ul>`
+   <ul class="collapsible-list">${collapsibleElements}</ul>`
 
 /* -------------------------------------------------------
  * Rich Text formatter
@@ -242,12 +246,12 @@ export function renderComponent(props: ComponentProps) {
     case "componentRichTextVariable":
       return key ? String(data?.[key] ?? `{{${key}}}`) : ""
     case "highlight":
-      return html`<proto-dynamic-highlight
+      return `<proto-dynamic-highlight
         .protoButtonHandlers=${protoButtonHandlers}
         props='${JSON.stringify(target)}'>
       </proto-dynamic-highlight>`
     case "dynamicGroup":
-      return html`<proto-dynamic-group
+      return `<proto-dynamic-group
         .protoButtonHandlers=${protoButtonHandlers}
         props='${JSON.stringify(target)}'>
       </proto-dynamic-group>`

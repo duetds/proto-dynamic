@@ -1,6 +1,7 @@
 import { html, LitElement, nothing } from "lit"
 import { customElement, property } from "lit/decorators.js"
 import type { ProtoButtonHandler } from "../hero/proto-dynamic-hero"
+import type { ActionEntry } from "../module/proto-dynamic-module"
 import { getLinkUrl, handleLinkClick, isUrlExternal } from "../utils/helper-functions"
 
 export interface HighlightItem {
@@ -24,15 +25,6 @@ export interface RichTextDocument {
 export interface RichTextNode {
   value?: string
   content?: RichTextNode[]
-}
-
-export interface ActionEntry {
-  fields: {
-    key: string
-    text?: string
-    url: string
-    icon?: string
-  }
 }
 
 @customElement("proto-dynamic-highlight")

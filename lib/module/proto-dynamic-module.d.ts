@@ -11,7 +11,7 @@ export interface ActionEntry {
     fields: {
         key: string;
         text?: string;
-        url?: string;
+        url: string;
         icon?: string;
         heading?: string | undefined;
         items?: [] | undefined;

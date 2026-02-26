@@ -1,5 +1,6 @@
 import { LitElement, nothing } from "lit";
 import type { ProtoButtonHandler } from "../hero/proto-dynamic-hero";
+import type { ActionEntry } from "../module/proto-dynamic-module";
 export interface HighlightItem {
     fields: HighlightFields;
 }
@@ -18,14 +19,6 @@ export interface RichTextDocument {
 export interface RichTextNode {
     value?: string;
     content?: RichTextNode[];
-}
-export interface ActionEntry {
-    fields: {
-        key: string;
-        text?: string;
-        url: string;
-        icon?: string;
-    };
 }
 export declare class ProtoDynamicHighlight extends LitElement {
     props?: HighlightItem;

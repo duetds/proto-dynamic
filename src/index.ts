@@ -7,7 +7,6 @@ import { ProtoDynamicModule } from "./module/proto-dynamic-module"
 import { ProtoDynamicNotice } from "./notice/proto-dynamic-notice"
 import { ProtoDynamicRichText } from "./rich-text/proto-dynamic-rich-text"
 
-console.log("Testing")
 export {
   ProtoDynamicHero,
   ProtoDynamicHighlight,

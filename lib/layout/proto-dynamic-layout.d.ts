@@ -6,14 +6,14 @@ interface DynamicLayoutItem {
 interface DynamicComponentContainer {
     __dynamicComponent: unknown[];
 }
-export interface DynamicLayoutProps {
+interface DynamicLayoutProps {
     __dynamicLayout: DynamicLayoutItem[];
     [key: string]: DynamicComponentContainer | DynamicLayoutItem[] | undefined;
 }
 export declare class ProtoDynamicLayout extends LitElement {
     props?: DynamicLayoutProps;
     protoButtonHandlers?: ProtoButtonHandler[];
-    render(): import("lit-html").TemplateResult<1> | typeof nothing;
+    render(): typeof nothing | import("lit-html").TemplateResult<1>;
 }
 export {};
 //# sourceMappingURL=proto-dynamic-layout.d.ts.map

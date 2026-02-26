@@ -1,5 +1,6 @@
 import { css, html, LitElement, nothing } from "lit"
 import { customElement, property } from "lit/decorators.js"
+import { unsafeHTML } from "lit/directives/unsafe-html.js"
 import type { ProtoButtonHandler } from "../hero/proto-dynamic-hero"
 import { renderComponent } from "../utils/helper-functions"
 
@@ -16,7 +17,7 @@ export interface ActionEntry {
   fields: {
     key: string
     text?: string
-    url?: string
+    url: string
     icon?: string
     heading?: string | undefined
     items?: [] | undefined
@@ -52,7 +53,8 @@ export class ProtoDynamicModule extends LitElement {
 
     function getComponent(item: ActionEntry, protoButtonHandlers?: ProtoButtonHandler[]) {
       const result = renderComponent({ target: item, protoButtonHandlers })
-      return result === "default" ? nothing : result
+
+      return result === "default" ? nothing : unsafeHTML(result)
     }
 
     return content?.length
