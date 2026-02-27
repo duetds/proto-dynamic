@@ -34,16 +34,6 @@ export class ProtoDynamicModule extends LitElement {
   @property({ type: Array }) props?: ModuleProps[]
   @property({ type: Array }) protoButtonHandlers?: ProtoButtonHandler[] // Overrides button behavior for prototype use
 
-  static override styles = css`
-   .no-padding {
-       padding: 0;
-   }
-      .module-grid {
-          display: grid;
-          gap: var(--space-medium);
-      }       
-  `
-
   override render() {
     const fields = this.props?.[0]?.fields
     const content = fields?.content || []
