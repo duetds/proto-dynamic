@@ -10,6 +10,15 @@ import type { HighlightItem } from "../highlight/proto-dynamic-highlight"
  * ----------------------------------------------------- */
 type ButtonLinkedItem = GroupItem | HighlightItem
 
+interface ComponentProps {
+  embedded?: EmbeddedEntryData
+  fields?: EmbeddedTargetFields
+  target?: EmbeddedTarget
+  protoButtonHandlers?: ProtoButtonHandler[]
+  key?: string
+  data?: Record<string, unknown>
+}
+
 interface EmbeddedEntry {
   sys: { id: string; contentType: { sys: { id: string } } }
   fields: Record<string, unknown>
@@ -20,9 +29,10 @@ interface EmbeddedTargetFields {
   entry?: EmbeddedEntry
   icon?: string
   text?: string
-  richTextAppearance: string
+  richTextAppearance?: string
   heading?: string
   body?: { content: RichTextNode[] }
+  items?: EmbeddedEntryData[]
 }
 
 interface EmbeddedTarget {
@@ -32,8 +42,8 @@ interface EmbeddedTarget {
 
 interface EmbeddedEntryData {
   target: EmbeddedTarget
-  typeId?: string
   key?: string
+  typeId?: string
   entry?: EmbeddedEntry
   fields: EmbeddedTargetFields
 }
@@ -59,9 +69,9 @@ export function handleLinkClick(item: ButtonLinkedItem, protoButtonHandlers?: Pr
 }
 
 /* -------------------------------------------------------
- * RichText content handler
+ * RichText content helpers
  * ----------------------------------------------------- */
-const transformVariation = (resourceType: string) => {
+const transformVariation = (resourceType?: string) => {
   switch (resourceType) {
     case "button-primary":
       return "primary"
@@ -117,36 +127,22 @@ export const renderRichText = (input: RichTextNode | RichTextNode[], data?: Reco
         const embedded = getEmbeddedEntryData(node)
         if (!embedded) return ""
 
-        const { typeId, fields } = embedded
-        if (!fields) return ""
+        const inlineRT = renderComponent({ embedded, target: embedded.target, fields: embedded.fields })
 
-        switch (typeId) {
-          case "collapsibleGroup": {
-            const heading = node.data.target.fields.heading || ""
-            const collapsibleElements = (node.data.target.fields.items || []).map(renderCollapsibleElement).join("") // join array into string
-            return renderCollapsibleGroup(heading, collapsibleElements)
-          }
-          case "componentShowMore":
-            return `<duet-show-more>${renderRichText(fields.body?.content ?? [])}</duet-show-more>`
-          case "buttonResource":
-            return renderButtonResource(embedded)
-          default:
-            return fields.body ? renderRichText(fields.body.content ?? []) : ""
-        }
+        return inlineRT === "default" ? renderRichText(embedded.fields.body?.content ?? []) : inlineRT
       },
       [INLINES.EMBEDDED_ENTRY]: node => {
         const embedded = getEmbeddedEntryData(node)
         if (!embedded) return ""
 
-        const { typeId, key } = embedded
-        switch (typeId) {
-          case "componentRichTextVariable":
-            return key ? String(data?.[key] ?? `{{${key}}}`) : ""
-          case "buttonResource":
-            return renderButtonResource(embedded)
-          default:
-            return `${typeId}: {{${key}}}`
-        }
+        const inlineRT = renderComponent({
+          embedded,
+          target: embedded.target,
+          fields: embedded.fields,
+          key: embedded.key,
+          data,
+        })
+        return inlineRT === "default" ? `${embedded.typeId}: {{${embedded.key}}}` : inlineRT
       },
       [BLOCKS.HR]: () => "<duet-divider></duet-divider>",
     } as Record<string, NodeRenderer>,
@@ -160,46 +156,44 @@ const renderButtonResource = (embedded: EmbeddedEntryData) => {
   const { target, entry } = embedded
   if (!entry || entry.sys.contentType.sys.id !== "dynamicModal") return ""
 
+  const icon = target.fields.icon ?? ""
+  const text = target.fields.text ?? ""
+  const variation = transformVariation(target.fields.richTextAppearance ?? "default")
+
   return `<duet-button
-    icon=${target.fields.icon}
-    variation=${transformVariation(target.fields.richTextAppearance)}
+    icon="${icon}"
+    variation="${variation}"
     margin="none"
     onclick='this.dispatchEvent(new CustomEvent("open-dynamic-modal", {
       detail: { entryId: "${entry.sys.id}", fields: ${JSON.stringify(entry.fields)} },
       bubbles: true,
       composed: true
     }))'>
-      ${target.fields.text}
+      ${text}
   </duet-button>`
 }
 
-const renderCollapsibleElement = (item: EmbeddedEntryData) => {
-  return `<li><duet-collapsible 
-    heading="${item.fields.heading || ""}"
-    >${renderRichText(item.fields.body?.content ?? [])}
-    </duet-collapsible>
-    <duet-divider margin="small"></duet-divider>
-  </li>`
-}
+const renderCollapsibleElement = (item: EmbeddedEntryData) => `<li>
+  <duet-collapsible heading="${item.fields.heading ?? ""}">
+    ${renderRichText(item.fields.body?.content ?? [])}
+  </duet-collapsible>
+  <duet-divider margin="small"></duet-divider>
+</li>`
 
-const renderCollapsibleGroup = (heading: string, collapsibleElements: string) => {
-  return `<style>
-    ul.collapsible-list {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-    }
-    </style>
-    ${
-      heading &&
-      `<duet-heading level="h3" visual-level="h4">${heading}</duet-heading>
-    <duet-spacer size="small"></duet-spacer>
-    <duet-divider margin="small"></duet-divider>`
-    }
-     <ul class="collapsible-list">
-     ${collapsibleElements}
-     </ul>`
-}
+const renderCollapsibleGroup = (heading: string, collapsibleElements: string) => `
+  <style>
+    ul.collapsible-list { 
+     list-style: none; 
+     margin: 0; 
+     padding: 0; }
+  </style>
+ ${
+   heading &&
+   `<duet-heading level="h3" visual-level="h4">${heading}</duet-heading>
+      <duet-spacer size="small"></duet-spacer>
+      <duet-divider margin="small"></duet-divider>`
+ }
+   <ul class="collapsible-list">${collapsibleElements}</ul>`
 
 /* -------------------------------------------------------
  * Rich Text formatter
@@ -209,15 +203,16 @@ const renderCollapsibleGroup = (heading: string, collapsibleElements: string) =>
  * @param options object, supported keys: "margin" with value "none", "stylePreset" with value one of "small", "intro", "caption", "smallCaption"
  * @returns HTML text
  */
-export function formatRichText(html: string, options: { margin?: string; stylePreset?: string }) {
-  if (!options) {
-    return html
-  }
+export function formatRichText(html: string, options?: { margin?: string; stylePreset?: string }): string {
+  if (!options) return html
+
   const container = document.createElement("div")
   container.innerHTML = html
+
   if (options.margin === "none") {
-    container?.querySelector("duet-paragraph:last-of-type")?.setAttribute("margin", "none")
+    container.querySelector("duet-paragraph:last-of-type")?.setAttribute("margin", "none")
   }
+
   if (options.stylePreset) {
     if (options.stylePreset.startsWith("caption")) {
       container.querySelectorAll("duet-paragraph").forEach(el => {
@@ -236,5 +231,43 @@ export function formatRichText(html: string, options: { margin?: string; stylePr
       container.querySelectorAll("duet-paragraph").forEach(el => el.setAttribute("variation", "intro"))
     }
   }
+
   return container.innerHTML
+}
+
+/* -------------------------------------------------------
+ * Component renderer
+ * ----------------------------------------------------- */
+export function renderComponent(props: ComponentProps) {
+  const { embedded, target, fields, protoButtonHandlers, key, data } = props
+  const typeId = target?.sys?.contentType?.sys?.id
+
+  switch (typeId) {
+    case "componentRichTextVariable":
+      return key ? String(data?.[key] ?? `{{${key}}}`) : ""
+    case "highlight":
+      return `<proto-dynamic-highlight
+        .protoButtonHandlers=${protoButtonHandlers}
+        props='${JSON.stringify(target)}'>
+      </proto-dynamic-highlight>`
+    case "dynamicGroup":
+      return `<proto-dynamic-group
+        .protoButtonHandlers=${protoButtonHandlers}
+        props='${JSON.stringify(target)}'>
+      </proto-dynamic-group>`
+    case "collapsibleGroup": {
+      const heading = target?.fields?.heading ?? ""
+      const collapsibleElements = (target?.fields?.items ?? []).map(renderCollapsibleElement).join("")
+      return renderCollapsibleGroup(heading, collapsibleElements)
+    }
+    case "componentShowMore":
+      return `<duet-show-more>${renderRichText(fields?.body?.content ?? [])}</duet-show-more>`
+    case "buttonResource":
+      if (!embedded) return "default"
+      return renderButtonResource(embedded)
+    case "alert":
+      return `<proto-dynamic-notice props='${JSON.stringify(target)}'></proto-dynamic-notice>`
+    default:
+      return "default"
+  }
 }

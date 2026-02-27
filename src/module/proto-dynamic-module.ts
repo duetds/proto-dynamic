@@ -1,6 +1,8 @@
-import { css, html, LitElement, nothing } from "lit"
+import { html, LitElement, nothing } from "lit"
 import { customElement, property } from "lit/decorators.js"
+import { unsafeHTML } from "lit/directives/unsafe-html.js"
 import type { ProtoButtonHandler } from "../hero/proto-dynamic-hero"
+import { renderComponent } from "../utils/helper-functions"
 
 interface ModuleProps {
   fields: HighlightFields
@@ -11,12 +13,14 @@ interface HighlightFields {
   content?: ActionEntry[]
 }
 
-interface ActionEntry {
+export interface ActionEntry {
   fields: {
     key: string
     text?: string
-    url?: string
+    url: string
     icon?: string
+    heading?: string | undefined
+    items?: [] | undefined
   }
   sys: {
     contentType: {
@@ -30,52 +34,32 @@ export class ProtoDynamicModule extends LitElement {
   @property({ type: Array }) props?: ModuleProps[]
   @property({ type: Array }) protoButtonHandlers?: ProtoButtonHandler[] // Overrides button behavior for prototype use
 
-  static override styles = css`
-   .no-padding {
-       padding: 0;
-   }
-  `
-
   override render() {
     const fields = this.props?.[0]?.fields
     const content = fields?.content
 
+    //TODO: grid template should be used only on page level
+    // delete this and check what was the requirement with dynamic components and how we want to present them
     function getGridTemplate() {
       if (!content?.length || content.length === 1) return nothing
       return content.length === 2 ? "two-columns" : "three-columns"
     }
 
     function getComponent(item: ActionEntry, protoButtonHandlers?: ProtoButtonHandler[]) {
-      const { id } = item.sys.contentType.sys
-      switch (id) {
-        case "highlight":
-          return html`<proto-dynamic-highlight
-            .protoButtonHandlers=${protoButtonHandlers}
-            .props=${item}>
-          </proto-dynamic-highlight>`
-        case "dynamicGroup":
-          return html`<proto-dynamic-group
-            .protoButtonHandlers=${protoButtonHandlers}
-            .props=${item}>
-          </proto-dynamic-group>`
-        case "alert":
-          return html`<proto-dynamic-notice
-            .props=${item}>
-          </proto-dynamic-notice>`
-        default:
-          return nothing
-      }
+      const result = renderComponent({ target: item, protoButtonHandlers })
+
+      return result === "default" ? nothing : unsafeHTML(result)
     }
 
     return content?.length
       ? html`
-        <duet-grid class="no-padding" grid-template=${getGridTemplate()}>
+        <duet-grid grid-template=${getGridTemplate()}>
           ${content.map(
             item => html`
-            <duet-grid-item fill>
-              ${getComponent(item, this.protoButtonHandlers)}
-            </duet-grid-item>
-          `
+              <duet-grid-item fill>
+                ${getComponent(item, this.protoButtonHandlers)}
+              </duet-grid-item>
+            `
           )}
         </duet-grid>
       `

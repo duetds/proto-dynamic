@@ -1,7 +1,7 @@
 {
   "name": "@duetds/proto-dynamic",
   "private": true,
-  "version": "1.3.6",
+  "version": "1.4.0",
   "description": "Web components to correspond to the LLA components for dynamic Contentful types",
   "main": "lib/index.js",
   "module": "lib/index.js",
@@ -75,7 +75,8 @@
   },
   "peerDependencies": {
     "@duetds/components": "^9.8.0",
-    "@duetds/tokens": "4.0.85"
+    "@duetds/tokens": "^4.0.73",
+    "@duetds/css": "^4.0.59"
   },
   "customElements": "custom-elements.json"
 }

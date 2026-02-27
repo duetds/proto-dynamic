@@ -7,12 +7,14 @@ interface HighlightFields {
     key: string;
     content?: ActionEntry[];
 }
-interface ActionEntry {
+export interface ActionEntry {
     fields: {
         key: string;
         text?: string;
-        url?: string;
+        url: string;
         icon?: string;
+        heading?: string | undefined;
+        items?: [] | undefined;
     };
     sys: {
         contentType: {
@@ -25,7 +27,6 @@ interface ActionEntry {
 export declare class ProtoDynamicModule extends LitElement {
     props?: ModuleProps[];
     protoButtonHandlers?: ProtoButtonHandler[];
-    static styles: import("lit").CSSResult;
     render(): import("lit-html").TemplateResult<1> | typeof nothing;
 }
 export {};

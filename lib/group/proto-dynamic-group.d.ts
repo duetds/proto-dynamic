@@ -1,6 +1,7 @@
 import { LitElement } from "lit";
 import type { ProtoButtonHandler } from "../hero/proto-dynamic-hero";
-import type { ActionEntry, HighlightFields } from "../highlight/proto-dynamic-highlight";
+import type { HighlightFields } from "../highlight/proto-dynamic-highlight";
+import type { ActionEntry } from "../module/proto-dynamic-module";
 export interface GroupItem {
     fields: GroupItemFields;
 }
