@@ -1,4 +1,4 @@
-import { html, LitElement, nothing } from "lit"
+import { css, html, LitElement, nothing } from "lit"
 import { customElement, property } from "lit/decorators.js"
 import { unsafeHTML } from "lit/directives/unsafe-html.js"
 import type { ProtoButtonHandler } from "../hero/proto-dynamic-hero"
@@ -32,22 +32,31 @@ export interface ActionEntry {
 @customElement("proto-dynamic-module")
 export class ProtoDynamicModule extends LitElement {
   @property({ type: Array }) props?: ModuleProps[]
-  @property({ type: Array }) protoButtonHandlers?: ProtoButtonHandler[] // Overrides button behavior for prototype use
+  @property({ type: Array }) protoButtonHandlers?: ProtoButtonHandler[]
+
+  static override styles = css`
+    .module-grid {
+      display: grid;
+      gap: var(--space-medium);
+    }
+  `
 
   override render() {
     const fields = this.props?.[0]?.fields
     const content = fields?.content || []
-    const columns = Math.min(content?.length, 3) || 1
-    const gridStyle = `grid-template-columns: repeat(${columns}, 1fr);`
 
     function getComponent(item: ActionEntry, protoButtonHandlers?: ProtoButtonHandler[]) {
       const result = renderComponent({ target: item, protoButtonHandlers })
       return result === "default" ? nothing : unsafeHTML(result)
     }
 
-    return content?.length
+    // Determine number of columns: max 3, based on content length
+    const columns = Math.min(content.length, 3) || 1
+    const gridStyle = `grid-template-columns: repeat(${columns}, 1fr);`
+
+    return content.length
       ? html`
-        <div class="no-padding module-grid" style=${gridStyle}>
+        <div class="module-grid" style=${gridStyle}>
           ${content.map(
             item => html`
               <div>
@@ -55,7 +64,7 @@ export class ProtoDynamicModule extends LitElement {
               </div>
             `
           )}
-          </duet-grid>
+        </div>
       `
       : nothing
   }

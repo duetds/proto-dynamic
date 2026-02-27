@@ -27,7 +27,8 @@ export interface ActionEntry {
 export declare class ProtoDynamicModule extends LitElement {
     props?: ModuleProps[];
     protoButtonHandlers?: ProtoButtonHandler[];
-    render(): import("lit-html").TemplateResult<1> | typeof nothing;
+    static styles: import("lit").CSSResult;
+    render(): typeof nothing | import("lit-html").TemplateResult<1>;
 }
 export {};
 //# sourceMappingURL=proto-dynamic-module.d.ts.map
