@@ -7,8 +7,8 @@ import { formatRichText, renderRichText } from "../utils/helper-functions"
 export interface ProtoDynamicRichTextProps {
   data: RichTextNode[]
   options?: {
-    margin?: "none" | "small" | "medium" | "large"
-    stylePreset?: "small" | "intro"
+    margin?: string
+    stylePreset?: string
     [key: string]: unknown
   }
 }
