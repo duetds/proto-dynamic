@@ -1,4 +1,4 @@
-import { html, LitElement, nothing } from "lit"
+import { css, html, LitElement, nothing } from "lit"
 import { customElement, property } from "lit/decorators.js"
 import { unsafeHTML } from "lit/directives/unsafe-html.js"
 import type { ProtoButtonHandler } from "../hero/proto-dynamic-hero"
@@ -32,36 +32,39 @@ export interface ActionEntry {
 @customElement("proto-dynamic-module")
 export class ProtoDynamicModule extends LitElement {
   @property({ type: Array }) props?: ModuleProps[]
-  @property({ type: Array }) protoButtonHandlers?: ProtoButtonHandler[] // Overrides button behavior for prototype use
+  @property({ type: Array }) protoButtonHandlers?: ProtoButtonHandler[]
+
+  static override styles = css`
+    .module-grid {
+      display: grid;
+      gap: var(--space-medium);
+    }
+  `
 
   override render() {
     const fields = this.props?.[0]?.fields
-    const content = fields?.content
-
-    //TODO: grid template should be used only on page level
-    // delete this and check what was the requirement with dynamic components and how we want to present them
-    function getGridTemplate() {
-      if (!content?.length || content.length === 1) return nothing
-      return content.length === 2 ? "two-columns" : "three-columns"
-    }
+    const content = fields?.content || []
 
     function getComponent(item: ActionEntry, protoButtonHandlers?: ProtoButtonHandler[]) {
       const result = renderComponent({ target: item, protoButtonHandlers })
-
       return result === "default" ? nothing : unsafeHTML(result)
     }
 
-    return content?.length
+    // Determine number of columns: max 3, based on content length
+    const columns = Math.min(content.length, 3) || 1
+    const gridStyle = `grid-template-columns: repeat(${columns}, 1fr);`
+
+    return content.length
       ? html`
-        <duet-grid grid-template=${getGridTemplate()}>
+        <div class="module-grid" style=${gridStyle}>
           ${content.map(
             item => html`
-              <duet-grid-item fill>
+              <div>
                 ${getComponent(item, this.protoButtonHandlers)}
-              </duet-grid-item>
+              </div>
             `
           )}
-        </duet-grid>
+        </div>
       `
       : nothing
   }
