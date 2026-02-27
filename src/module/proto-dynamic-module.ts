@@ -1,4 +1,4 @@
-import { css, html, LitElement, nothing } from "lit"
+import { html, LitElement, nothing } from "lit"
 import { customElement, property } from "lit/decorators.js"
 import { unsafeHTML } from "lit/directives/unsafe-html.js"
 import type { ProtoButtonHandler } from "../hero/proto-dynamic-hero"
@@ -50,12 +50,12 @@ export class ProtoDynamicModule extends LitElement {
         <div class="no-padding module-grid" style=${gridStyle}>
           ${content.map(
             item => html`
-            <div>
-              ${getComponent(item, this.protoButtonHandlers)}
-            </div>
-          `
+              <div>
+                ${getComponent(item, this.protoButtonHandlers)}
+              </div>
+            `
           )}
-        </duet-grid>
+          </duet-grid>
       `
       : nothing
   }
