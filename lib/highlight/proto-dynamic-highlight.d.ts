@@ -23,6 +23,6 @@ export interface RichTextNode {
 export declare class ProtoDynamicHighlight extends LitElement {
     props?: HighlightItem;
     protoButtonHandlers?: ProtoButtonHandler[];
-    render(): typeof nothing | import("lit-html").TemplateResult<1>;
+    render(): import("lit-html").TemplateResult<1> | typeof nothing;
 }
 //# sourceMappingURL=proto-dynamic-highlight.d.ts.map
